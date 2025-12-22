@@ -63,6 +63,11 @@ app.get("/users", (_req, res) => {
 	]);
 });
 
+// Catch-all route
+app.use((req, res) => {
+	res.status(404).send({ message: `Cannot ${req.method} ${req.path}` });
+});
+
 // Start listening for incoming requests on port 3000
 app.listen(PORT, () => {
 	// Will be invoked once the server has started listening

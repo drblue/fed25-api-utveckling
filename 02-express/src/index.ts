@@ -11,7 +11,13 @@ app.get("/", (req, res) => {
 	console.log("Someone requested my (g)root 🎄");
 	console.log("Request method:", req.method);
 	console.log("Request path:", req.path);
-	res.send("Oh, hi there ☺️");
+	res.send({ message: "Oh, hi there ☺️" });
+});
+
+// Listen for incoming POST-requests to "/"
+app.post("/", (_req, res) => {
+	console.log("Someone tried to mail me something 💌");
+	res.send({ message: "I'm not a mailbox 😡" });
 });
 
 // Listen for incoming GET-requests to "/coffee"
@@ -32,7 +38,7 @@ app.get("/coffee", (_req, res) => {
 
 // Listen for incoming GET-requests to "/lol"
 app.get("/lol", (_req, res) => {
-	res.send("I was wondering why the frisbee kept getting bigger and bigger, but then it hit me.");
+	res.send({ message: "I was wondering why the frisbee kept getting bigger and bigger, but then it hit me." });
 });
 
 // Listen for incoming GET-requests to "/users"

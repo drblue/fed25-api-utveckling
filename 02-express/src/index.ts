@@ -1,4 +1,5 @@
 import express from "express";
+import oneliners from "./data/oneliners.json" with { type: "json" };
 
 // Declare config
 const PORT = 3000;
@@ -41,9 +42,11 @@ app.get("/joke", (_req, res) => {
 	// Somehow get all oneliners from `data/oneliners.json`
 	// Get a random oneliner from the array of oneliners
 	// Replace the hardcoded string with the random joke in the object below
+	const i = Math.floor( Math.random() * oneliners.length );
+	const joke = oneliners[i];
 
 	res.send({
-		joke: "I'm batman, *shhh*",
+		joke,
 	});
 });
 

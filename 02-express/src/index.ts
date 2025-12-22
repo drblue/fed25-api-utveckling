@@ -14,6 +14,22 @@ app.get("/", (req, res) => {
 	res.send("Oh, hi there ☺️");
 });
 
+// Listen for incoming GET-requests to "/coffee"
+app.get("/coffee", (_req, res) => {
+	console.log("☕️😋 coffee yum");
+	res.send({
+		can_you_have_too_much: false,
+		coffee: "is good for you",
+		do_i_need_moar_coffee: true,
+		message: "Lolcats are funny",
+		nicknames: [
+			"coffee",
+			"life-giving liquid",
+			"black gold",
+		],
+	});
+});
+
 // Listen for incoming GET-requests to "/lol"
 app.get("/lol", (_req, res) => {
 	res.send("I was wondering why the frisbee kept getting bigger and bigger, but then it hit me.");

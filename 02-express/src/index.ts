@@ -36,6 +36,17 @@ app.get("/coffee", (_req, res) => {
 	});
 });
 
+// Listen for incoming GET requests to "/joke"
+app.get("/joke", (_req, res) => {
+	// Somehow get all oneliners from `data/oneliners.json`
+	// Get a random oneliner from the array of oneliners
+	// Replace the hardcoded string with the random joke in the object below
+
+	res.send({
+		joke: "I'm batman, *shhh*",
+	});
+});
+
 // Listen for incoming GET-requests to "/lol"
 app.get("/lol", (_req, res) => {
 	res.send({ message: "I was wondering why the frisbee kept getting bigger and bigger, but then it hit me." });

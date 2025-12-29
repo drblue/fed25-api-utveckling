@@ -10,6 +10,9 @@ const PORT = 3000;
 // Create a new Express app
 const app = express();
 
+// Parse any incoming JSON
+app.use(express.json());
+
 // 🪵 Log information about the incoming requests using the `morgan` logging middleware
 app.use(morgan("dev"));
 
@@ -58,6 +61,26 @@ app.get("/lol", (_req, res) => {
 // Listen for incoming GET-requests to "/users"
 app.get("/users", (_req, res) => {
 	res.send(users);
+});
+
+// Listen for incoming POST-requests to "/users"
+app.post("/users", (req, res) => {
+	console.log("Request body:", req.body);
+
+	// Find the highest ID in the `users` array
+	const maxId = Math.max(0, ...users.map(user => user.id));
+
+	// Create the new user object
+	const user = {
+		...req.body,
+		id: maxId + 1,
+	}
+
+	// Push the new user to the array (and append the next available ID)
+	users.push(user);
+
+	// Respond with the new user
+	res.status(201).send(user);
 });
 
 // Listen for incoming GET-requests to "/users/{userId}"

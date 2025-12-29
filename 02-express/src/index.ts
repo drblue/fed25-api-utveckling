@@ -60,6 +60,22 @@ app.get("/users", (_req, res) => {
 	res.send(users);
 });
 
+// Listen for incoming GET-requests to "/users/{userId}"
+app.get("/users/:userId", (req, res) => {
+	console.log("Request params:", req.params);
+	res.send({ message: "Would get single user" });
+});
+
+// Listen for incoming GET-requests to "/users/{userId}/books/{bookId}"
+// "/users/johan/books/typescript-my-eternal-love"
+// "/users/pelle/books/pride&predjudice"
+// "/users/5/books/42"
+// "/users/SOMETHING/books/SOMETHINGELSE"
+app.get("/users/:userId/books/:bookId", (req, res) => {
+	console.log("Request params:", req.params);
+	res.send({ message: "Would send book if I could" });
+});
+
 // Catch-all route
 app.use((req, res) => {
 	res.status(404).send({ message: `Cannot ${req.method} ${req.path}` });

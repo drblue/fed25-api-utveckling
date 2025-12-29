@@ -64,6 +64,10 @@ app.get("/users", (_req, res) => {
 app.get("/users/:userId", (req, res) => {
 	// Get value of route parameter `userId` (and cast it to a Number)
 	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid User Id" });
+		return;
+	}
 
 	// Find user with id `userId` in the `users` array
 	const user = users.find((user) => user.id === userId);

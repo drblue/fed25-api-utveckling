@@ -1,5 +1,6 @@
 import express from "express";
 import _ from "lodash";
+import morgan from "morgan";
 import oneliners from "./data/oneliners.json" with { type: "json" };
 
 // Declare config
@@ -8,14 +9,8 @@ const PORT = 3000;
 // Create a new Express app
 const app = express();
 
-// Log to console about incoming requests
-app.use((req, _res, next) => {
-	const now = new Date();
-	console.log(`${now.toLocaleString()} - ${req.method} ${req.path}`);
-
-	// Pass the request along to the next handler in the chain
-	next();
-});
+// 🪵 Log information about the incoming requests using the `morgan` logging middleware
+app.use(morgan("dev"));
 
 // Listen for incoming GET-requests to "/"
 app.get("/", (_req, res) => {

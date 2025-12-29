@@ -62,18 +62,14 @@ app.get("/users", (_req, res) => {
 
 // Listen for incoming GET-requests to "/users/{userId}"
 app.get("/users/:userId", (req, res) => {
-	console.log("Request params:", req.params);
-	res.send({ message: "Would get single user" });
-});
+	// Get value of route parameter `userId` (and cast it to a Number)
+	const userId = Number(req.params.userId);
 
-// Listen for incoming GET-requests to "/users/{userId}/books/{bookId}"
-// "/users/johan/books/typescript-my-eternal-love"
-// "/users/pelle/books/pride&predjudice"
-// "/users/5/books/42"
-// "/users/SOMETHING/books/SOMETHINGELSE"
-app.get("/users/:userId/books/:bookId", (req, res) => {
-	console.log("Request params:", req.params);
-	res.send({ message: "Would send book if I could" });
+	// Find user with id `userId` in the `users` array
+	const user = users.find((user) => user.id === userId);
+
+	// Respond with the found user
+	res.send(user);
 });
 
 // Catch-all route

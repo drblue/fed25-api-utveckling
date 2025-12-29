@@ -68,6 +68,13 @@ app.get("/users/:userId", (req, res) => {
 	// Find user with id `userId` in the `users` array
 	const user = users.find((user) => user.id === userId);
 
+	// Handle user not found (guard clause/early return)
+	if (!user) {
+		// Respond with user not found
+		res.status(404).send({ message: "User Not Found" });
+		return;
+	}
+
 	// Respond with the found user
 	res.send(user);
 });

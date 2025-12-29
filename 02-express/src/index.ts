@@ -2,7 +2,7 @@ import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
 import oneliners from "./data/oneliners.json" with { type: "json" };
-import users from "./data/users.json" with { type: "json" };
+import { users } from "./data/users.ts";
 
 // Declare config
 const PORT = 3000;

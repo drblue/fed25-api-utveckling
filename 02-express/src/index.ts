@@ -2,6 +2,7 @@ import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
 import oneliners from "./data/oneliners.json" with { type: "json" };
+import users from "./data/users.json" with { type: "json" };
 
 // Declare config
 const PORT = 3000;
@@ -56,24 +57,7 @@ app.get("/lol", (_req, res) => {
 
 // Listen for incoming GET-requests to "/users"
 app.get("/users", (_req, res) => {
-	res.send([
-		{
-			username: "johan",
-			profile_picture: "https://thumb.ac-illust.com/3c/3cea0e36d984553348ca536f07ca7617_t.jpeg",
-		},
-		{
-			username: "pelle",
-			profile_picture: null,
-		},
-		{
-			username: "kajsa",
-			profile_picture: null,
-		},
-		{
-			username: "mimmi",
-			profile_picture: null,
-		},
-	]);
+	res.send(users);
 });
 
 // Catch-all route

@@ -8,12 +8,17 @@ const PORT = 3000;
 // Create a new Express app
 const app = express();
 
+// Log to console about incoming requests
+app.use((req, _res, next) => {
+	console.log(`🙋 ${req.method} ${req.path}`);
+
+	// Pass the request along to the next handler in the chain
+	next();
+});
+
 // Listen for incoming GET-requests to "/"
-app.get("/", (req, res) => {
-	console.log("Someone requested my (g)root 🎄");
-	console.log("Request method:", req.method);
-	console.log("Request path:", req.path);
-	res.send({ message: "Oh, hi there ☺️" });
+app.get("/", (_req, res) => {
+	res.send({ message: "Oh, hi there 😊" });
 });
 
 // Listen for incoming POST-requests to "/"

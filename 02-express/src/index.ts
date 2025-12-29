@@ -10,7 +10,8 @@ const app = express();
 
 // Log to console about incoming requests
 app.use((req, _res, next) => {
-	console.log(`🙋 ${req.method} ${req.path}`);
+	const now = new Date();
+	console.log(`${now.toLocaleString()} - ${req.method} ${req.path}`);
 
 	// Pass the request along to the next handler in the chain
 	next();
@@ -23,13 +24,11 @@ app.get("/", (_req, res) => {
 
 // Listen for incoming POST-requests to "/"
 app.post("/", (_req, res) => {
-	console.log("Someone tried to mail me something 💌");
 	res.send({ message: "I'm not a mailbox 😡" });
 });
 
 // Listen for incoming GET-requests to "/coffee"
 app.get("/coffee", (_req, res) => {
-	console.log("☕️😋 coffee yum");
 	res.send({
 		can_you_have_too_much: false,
 		coffee: "is good for you",

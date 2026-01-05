@@ -106,6 +106,41 @@ app.get("/users/:userId", (req, res) => {
 	res.send(user);
 });
 
+// Listen for incoming PATCH-requests to "/users/{userId}"
+app.patch("/users/:userId", (req, res) => {
+	// Get value of route parameter `userId` (and cast it to a Number)
+	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid User Id" });
+		return;
+	}
+
+	// Find user with id `userId` in the `users` array
+	const user = users.find((user) => user.id === userId);
+
+	// Handle user not found (guard clause/early return)
+	if (!user) {
+		// Respond with user not found
+		res.status(404).send({ message: "User Not Found" });
+		return;
+	}
+
+	// Find index in array for user
+	const userIndex = users.indexOf(user);
+
+	// Create a new object that's a merge of the existing user and the incoming data
+	const updatedUser = {
+		...user,
+		...req.body,
+	}
+
+	// Overwrite item at index with a new object that's a merge of the existing user and the incoming data
+	users[userIndex] = updatedUser;
+
+	// Respond with the (updated) user
+	res.send(updatedUser);
+});
+
 // Catch-all route
 app.use((req, res) => {
 	res.status(404).send({ message: `Cannot ${req.method} ${req.path}` });

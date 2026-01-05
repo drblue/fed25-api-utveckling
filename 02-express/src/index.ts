@@ -141,6 +141,35 @@ app.patch("/users/:userId", (req, res) => {
 	res.send(updatedUser);
 });
 
+// Listen for incoming DELETE-requests to "/users/{userId}"
+app.delete("/users/:userId", (req, res) => {
+	// Get value of route parameter `userId` (and cast it to a Number)
+	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid User Id" });
+		return;
+	}
+
+	// Find user with id `userId` in the `users` array
+	const user = users.find((user) => user.id === userId);
+
+	// Handle user not found (guard clause/early return)
+	if (!user) {
+		// Respond with user not found
+		res.status(404).send({ message: "User Not Found" });
+		return;
+	}
+
+	// Find index in array for user
+	const userIndex = users.indexOf(user);
+
+	// ✂️🎞️ Slice the array
+	users.splice(userIndex, 1);
+
+	// Respond with 204 No Content
+	res.status(204).send();
+});
+
 // Catch-all route
 app.use((req, res) => {
 	res.status(404).send({ message: `Cannot ${req.method} ${req.path}` });

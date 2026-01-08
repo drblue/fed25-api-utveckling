@@ -28,8 +28,75 @@ app.get("/", (_req, res) => {
  * Get all phones
  */
 app.get("/phones", async (_req, res) => {
-	// Query the database to get all phones
-	const phones = await prisma.phones.findMany();
+	/*
+	// Get all phones but only id, manufacturer and model columns
+	// `SELECT id, manufacturer, model FROM phones`
+	const phones = await prisma.phones.findMany({
+		select: {
+			id: true,
+			manufacturer: true,
+			model: true,
+		},
+	});
+	*/
+
+	/*
+	// Get all Nokia-phones
+	// `SELECT * FROM phones WHERE manufacturer = "Nokia"`
+	const phones = await prisma.phones.findMany({
+		where: {
+			manufacturer: "Nokia",
+		},
+	});
+	*/
+
+	/*
+	// Get all phones that has "s" in their manufacturer name
+	// `SELECT * FROM phones WHERE manufacturer LIKE "%s%"`
+	const phones = await prisma.phones.findMany({
+		where: {
+			manufacturer: {
+				contains: "s"
+			},
+		},
+	});
+	*/
+
+	/*
+	// Get the first 2 phones
+	// `SELECT * FROM phones LIMIT 3`
+	const phones = await prisma.phones.findMany({
+		take: 2,
+	});
+	*/
+
+	/*
+	// Get 2 phones but skip the first 4
+	// `SELECT * FROM phones LIMIT 2 OFFSET 4`
+	const phones = await prisma.phones.findMany({
+		take: 2,
+		skip: 4,
+	});
+	*/
+
+	/*
+	// Get all phones but sort them by manufacturer
+	// `SELECT * FROM phones ORDER BY manufacturer ASC`
+	const phones = await prisma.phones.findMany({
+		orderBy: [
+			{ manufacturer: "asc" },
+		],
+	});
+	*/
+
+	// Get all phones but sort them by manufacturer AND THEN model
+	// `SELECT * FROM phones ORDER BY manufacturer ASC, model ASC`
+	const phones = await prisma.phones.findMany({
+		orderBy: [
+			{ manufacturer: "asc" },
+			{ model: "asc" },
+		],
+	});
 
 	// Respond with the phones
 	res.send(phones);

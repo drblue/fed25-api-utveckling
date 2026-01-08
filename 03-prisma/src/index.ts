@@ -126,6 +126,7 @@ app.get("/phones", async (_req, res) => {
 	console.log("Phone:", phone);
 	*/
 
+	/*
 	// Get a specfic phone
 	// Return an object OR throws a tantrum
 	// `SELECT * FROM phones WHERE id = 2`
@@ -143,6 +144,20 @@ app.get("/phones", async (_req, res) => {
 		console.log("Probably didn't find phone");
 		res.status(404).send({ message: "Probably didn't find phone" });
 	}
+	*/
+
+	// Get all phones but only id, manufacturer and model columns
+	// `SELECT id, manufacturer, model FROM phones`
+	const phones = await prisma.phones.findMany({
+		select: {
+			id: true,
+			manufacturer: true,
+			model: true,
+		},
+	});
+
+	// Respond with the phones
+	res.send(phones);
 });
 
 /**

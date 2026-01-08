@@ -8,6 +8,13 @@ npm install express
 npm install -D typescript tsx @types/node @types/express
 ```
 
+### Prisma installation
+
+```bash
+npm install prisma @types/node --save-dev
+npm install @prisma/client @prisma/adapter-mariadb dotenv
+```
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

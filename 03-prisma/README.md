@@ -23,6 +23,18 @@ npx prisma init --datasource-provider mysql --output ../generated/prisma
 
 Don't forget to add `prisma.config.ts` to the `"include"`-array in `tsconfig.json`!
 
+#### Connect your database
+
+Update your `.env` file to match the settings for your local MySQL (database) server.
+
+#### Introspect your database
+
+```bash
+npx prisma db pull
+```
+
+This will update `prisma/schema.prisma`.
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

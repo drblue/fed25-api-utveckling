@@ -41,6 +41,24 @@ This will update `prisma/schema.prisma`.
 npx prisma generate
 ```
 
+#### Instantiate Prisma Client
+
+N.B.! Don't forget to add the separate `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_HOST`, `DATABASE_PORT` and `DATABASE_NAME` to your `.env` file (see example in `.env.example`). Do **NOT** delete the previous `DATABASE_URL` - it's still required.
+
+Create `src/lib/prisma.ts` with content from <https://www.prisma.io/docs/getting-started/prisma-orm/add-to-existing-project/mysql#7-instantiate-prisma-client>.
+
+Change line 3 from
+
+```ts
+import { PrismaClient } from "../generated/prisma/client";
+```
+
+to
+
+```ts
+import { PrismaClient } from "../../generated/prisma/client.ts";
+```
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

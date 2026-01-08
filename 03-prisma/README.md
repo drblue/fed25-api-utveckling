@@ -35,6 +35,12 @@ npx prisma db pull
 
 This will update `prisma/schema.prisma`.
 
+#### Generate Prisma ORM types
+
+```bash
+npx prisma generate
+```
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

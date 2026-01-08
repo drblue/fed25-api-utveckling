@@ -89,6 +89,7 @@ app.get("/phones", async (_req, res) => {
 	});
 	*/
 
+	/*
 	// Get all phones but sort them by manufacturer AND THEN model
 	// `SELECT * FROM phones ORDER BY manufacturer ASC, model ASC`
 	const phones = await prisma.phones.findMany({
@@ -97,9 +98,51 @@ app.get("/phones", async (_req, res) => {
 			{ model: "asc" },
 		],
 	});
+	*/
 
-	// Respond with the phones
-	res.send(phones);
+	/*
+	// Get the _first_ phone that matches our query
+	// Returns an object OR `null` if no rows match
+	// `SELECT * FROM phones WHERE manufacturer LIKE "Nok%" LIMIT 1`
+	const phone = await prisma.phones.findFirst({
+		where: {
+			manufacturer: {
+				startsWith: "Nok",
+			},
+		},
+	});
+	console.log("Phone:", phone);
+	*/
+
+	/*
+	// Get a specfic phone
+	// Returns an object OR `null` if no rows match
+	// `SELECT * FROM phones WHERE id = 2`
+	const phone = await prisma.phones.findUnique({
+		where: {
+			id: 2,
+		},
+	});
+	console.log("Phone:", phone);
+	*/
+
+	// Get a specfic phone
+	// Return an object OR throws a tantrum
+	// `SELECT * FROM phones WHERE id = 2`
+	try {
+		const phone = await prisma.phones.findUniqueOrThrow({
+			where: {
+				id: 13,
+			},
+		});
+		console.log("Phone:", phone);
+
+		// Respond with the phones
+		res.send(phone);
+	} catch (err) {
+		console.log("Probably didn't find phone");
+		res.status(404).send({ message: "Probably didn't find phone" });
+	}
 });
 
 /**

@@ -180,6 +180,9 @@ app.get("/phones/:phoneId", async (req, res) => {
 			where: {
 				id: phoneId,
 			},
+			include: {
+				user: true,
+			},
 		});
 
 		// Hello, this is dog 📞🐶
@@ -222,6 +225,9 @@ app.get("/users/:userId", async (req, res) => {
 		const user = await prisma.users.findUniqueOrThrow({
 			where: {
 				id: userId,
+			},
+			include: {
+				phones: true,
 			},
 		});
 

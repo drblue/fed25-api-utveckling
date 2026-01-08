@@ -21,6 +21,8 @@ npm install @prisma/client @prisma/adapter-mariadb dotenv
 npx prisma init --datasource-provider mysql --output ../generated/prisma
 ```
 
+Don't forget to add `prisma.config.ts` to the `"include"`-array in `tsconfig.json`!
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

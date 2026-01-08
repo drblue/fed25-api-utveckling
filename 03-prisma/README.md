@@ -15,6 +15,12 @@ npm install prisma @types/node --save-dev
 npm install @prisma/client @prisma/adapter-mariadb dotenv
 ```
 
+#### Initialize Prisma ORM
+
+```bash
+npx prisma init --datasource-provider mysql --output ../generated/prisma
+```
+
 ## TypeScript Config
 
 Skapa `tsconfig.json` med följande innehåll:

@@ -23,6 +23,19 @@ app.get("/", (_req, res) => {
 });
 
 /**
+ * GET /phones
+ *
+ * Get all phones
+ */
+app.get("/phones", async (_req, res) => {
+	// Query the database to get all phones
+	const phones = await prisma.phones.findMany();
+
+	// Respond with the phones
+	res.send(phones);
+});
+
+/**
  * GET /users
  *
  * Get all users
@@ -31,7 +44,7 @@ app.get("/users", async (_req, res) => {
 	// Query the database to get all users
 	const users = await prisma.users.findMany();
 
-	// Here we will get users from the database
+	// Respond with the users
 	res.send(users);
 });
 

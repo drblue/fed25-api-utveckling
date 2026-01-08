@@ -146,18 +146,24 @@ app.get("/phones", async (_req, res) => {
 	}
 	*/
 
-	// Get all phones but only id, manufacturer and model columns
-	// `SELECT id, manufacturer, model FROM phones`
-	const phones = await prisma.phones.findMany({
-		select: {
-			id: true,
-			manufacturer: true,
-			model: true,
-		},
-	});
+	try {
+		// Get all phones but only id, manufacturer and model columns
+		// `SELECT id, manufacturer, model FROM phones`
+		const phones = await prisma.phones.findMany({
+			select: {
+				id: true,
+				manufacturer: true,
+				model: true,
+			},
+		});
 
-	// Respond with the phones
-	res.send(phones);
+		// Respond with the phones
+		res.send(phones);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
 });
 
 /**
@@ -166,11 +172,16 @@ app.get("/phones", async (_req, res) => {
  * Get all users
  */
 app.get("/users", async (_req, res) => {
-	// Query the database to get all users
-	const users = await prisma.users.findMany();
+	try {
+		// Query the database to get all users
+		const users = await prisma.users.findMany();
 
-	// Respond with the users
-	res.send(users);
+		// Respond with the users
+		res.send(users);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
 });
 
 /**

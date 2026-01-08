@@ -1,6 +1,7 @@
 import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
+import { prisma } from "./lib/prisma.ts";
 
 // Declare config
 const PORT = 3000;
@@ -26,9 +27,12 @@ app.get("/", (_req, res) => {
  *
  * Get all users
  */
-app.get("/users", (_req, res) => {
+app.get("/users", async (_req, res) => {
+	// Query the database to get all users
+	const users = await prisma.users.findMany();
+
 	// Here we will get users from the database
-	res.send([]);
+	res.send(users);
 });
 
 /**

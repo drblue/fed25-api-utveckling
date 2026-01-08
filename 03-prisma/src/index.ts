@@ -167,6 +167,31 @@ app.get("/phones", async (_req, res) => {
 });
 
 /**
+ * GET /phones/:phoneId
+ *
+ * Get a single phone
+ */
+app.get("/phones/:phoneId", async (req, res) => {
+	const phoneId = Number(req.params.phoneId);
+
+	try {
+		// Find phone based on the unique id
+		const phone = await prisma.phones.findUniqueOrThrow({
+			where: {
+				id: phoneId,
+			},
+		});
+
+		// Hello, this is dog 📞🐶
+		res.send(phone);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
  * GET /users
  *
  * Get all users
@@ -178,6 +203,31 @@ app.get("/users", async (_req, res) => {
 
 		// Respond with the users
 		res.send(users);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
+ * GET /users/:userId
+ *
+ * Get a single user
+ */
+app.get("/users/:userId", async (req, res) => {
+	const userId = Number(req.params.userId);
+
+	try {
+		// Find user based on the unique id
+		const user = await prisma.users.findUniqueOrThrow({
+			where: {
+				id: userId,
+			},
+		});
+
+		// Hello, this is dog 🐶
+		res.send(user);
+
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({ message: "Something went wrong when querying the database" });

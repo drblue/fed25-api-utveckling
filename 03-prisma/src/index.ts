@@ -240,6 +240,26 @@ app.patch("/phones/:phoneId", async (req, res) => {
 });
 
 /**
+ * DELETE /phones/:phoneId
+ *
+ * Delete a phone
+ */
+app.delete("/phones/:phoneId", async (req, res) => {
+	const phoneId = Number(req.params.phoneId);
+
+	try {
+		await prisma.phones.delete({
+			where: { id: phoneId },
+		});
+		res.status(204).send();
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
  * --------------------------------------------------------
  * Users
  * --------------------------------------------------------
@@ -323,6 +343,26 @@ app.patch("/users/:userId", async (req, res) => {
 			data: req.body,
 		});
 		res.send(user);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
+ * DELETE /users/:userId
+ *
+ * Delete a user
+ */
+app.delete("/users/:userId", async (req, res) => {
+	const userId = Number(req.params.userId);
+
+	try {
+		await prisma.users.delete({
+			where: { id: userId },
+		});
+		res.status(204).send();
 
 	} catch (err) {
 		console.error(err);

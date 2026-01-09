@@ -1,7 +1,7 @@
-import express, { type Response } from "express";
+import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
-import { Prisma } from "../generated/prisma/client.ts";
+import { handlePrismaError } from "./lib/handlePrismaError.ts";
 import { prisma } from "./lib/prisma.ts";
 
 // Declare config
@@ -15,22 +15,6 @@ app.use(express.json());
 
 // 🪵 Log information about the incoming requests using the `morgan` logging middleware
 app.use(morgan("dev"));
-
-/**
- * Handle Prisma Errors
- */
-const handlePrismaError = (res: Response, err: unknown) => {
-	if (err instanceof Prisma.PrismaClientKnownRequestError) {
-		// Was it not found?
-		if (err.code === "P2025") {
-			res.status(404).send({ message: "Resource not found" });
-			return;
-		}
-	}
-
-	console.error(err);
-	res.status(500).send({ message: "Something went wrong when querying the database" });
-}
 
 /**
  * GET /

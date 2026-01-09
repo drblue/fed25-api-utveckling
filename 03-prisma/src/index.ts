@@ -1,6 +1,7 @@
-import express from "express";
+import express, { type Response } from "express";
 import _ from "lodash";
 import morgan from "morgan";
+import { Prisma } from "../generated/prisma/client.ts";
 import { prisma } from "./lib/prisma.ts";
 
 // Declare config
@@ -14,6 +15,22 @@ app.use(express.json());
 
 // 🪵 Log information about the incoming requests using the `morgan` logging middleware
 app.use(morgan("dev"));
+
+/**
+ * Handle Prisma Errors
+ */
+const handlePrismaError = (res: Response, err: unknown) => {
+	if (err instanceof Prisma.PrismaClientKnownRequestError) {
+		// Was it not found?
+		if (err.code === "P2025") {
+			res.status(404).send({ message: "Resource not found" });
+			return;
+		}
+	}
+
+	console.error(err);
+	res.status(500).send({ message: "Something went wrong when querying the database" });
+}
 
 /**
  * GET /
@@ -167,8 +184,7 @@ app.get("/phones", async (_req, res) => {
 		res.send(phones);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -185,8 +201,7 @@ app.post("/phones", async (req, res) => {
 		res.status(201).send(user);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -217,8 +232,7 @@ app.get("/phones/:phoneId", async (req, res) => {
 		res.send(phone);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -242,8 +256,7 @@ app.patch("/phones/:phoneId", async (req, res) => {
 		res.send(phone);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -266,8 +279,7 @@ app.delete("/phones/:phoneId", async (req, res) => {
 		res.status(204).send();
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -290,8 +302,7 @@ app.get("/users", async (_req, res) => {
 		// Respond with the users
 		res.send(users);
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -308,8 +319,7 @@ app.post("/users", async (req, res) => {
 		res.status(201).send(user);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -340,8 +350,7 @@ app.get("/users/:userId", async (req, res) => {
 		res.send(user);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -365,8 +374,7 @@ app.patch("/users/:userId", async (req, res) => {
 		res.send(user);
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 
@@ -389,8 +397,7 @@ app.delete("/users/:userId", async (req, res) => {
 		res.status(204).send();
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
+		handlePrismaError(res, err);
 	}
 });
 

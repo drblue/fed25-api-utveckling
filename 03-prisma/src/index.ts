@@ -173,6 +173,24 @@ app.get("/phones", async (_req, res) => {
 });
 
 /**
+ * POST /phones
+ *
+ * Create a phone
+ */
+app.post("/phones", async (req, res) => {
+	try {
+		const user = await prisma.phones.create({
+			data: req.body,
+		});
+		res.status(201).send(user);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
  * GET /phones/:phoneId
  *
  * Get a single phone
@@ -193,24 +211,6 @@ app.get("/phones/:phoneId", async (req, res) => {
 
 		// Hello, this is dog 📞🐶
 		res.send(phone);
-
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
-	}
-});
-
-/**
- * POST /phones
- *
- * Create a phone
- */
-app.post("/phones", async (req, res) => {
-	try {
-		const user = await prisma.phones.create({
-			data: req.body,
-		});
-		res.status(201).send(user);
 
 	} catch (err) {
 		console.error(err);
@@ -243,6 +243,24 @@ app.get("/users", async (_req, res) => {
 });
 
 /**
+ * POST /users
+ *
+ * Create a user
+ */
+app.post("/users", async (req, res) => {
+	try {
+		const user = await prisma.users.create({
+			data: req.body,
+		});
+		res.status(201).send(user);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
  * GET /users/:userId
  *
  * Get a single user
@@ -263,24 +281,6 @@ app.get("/users/:userId", async (req, res) => {
 
 		// Hello, this is dog 🐶
 		res.send(user);
-
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({ message: "Something went wrong when querying the database" });
-	}
-});
-
-/**
- * POST /users
- *
- * Create a user
- */
-app.post("/users", async (req, res) => {
-	try {
-		const user = await prisma.users.create({
-			data: req.body,
-		});
-		res.status(201).send(user);
 
 	} catch (err) {
 		console.error(err);

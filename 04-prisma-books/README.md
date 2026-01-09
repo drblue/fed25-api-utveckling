@@ -32,6 +32,11 @@ Edit `prisma/schema.prisma` as needed, then generate new Prisma Client types:
 npx prisma generate
 ```
 
+During prototyping, run `npx prisma db push` to push the schema to the database.
+
+Once the API is deployed, **DO NOT EVER RUN** `npx prisma db push` - instead use
+migrations (which we'll talk about next week)!
+
 ## Setup from scratch
 
 ```bash

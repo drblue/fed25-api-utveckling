@@ -219,6 +219,27 @@ app.get("/phones/:phoneId", async (req, res) => {
 });
 
 /**
+ * PATCH /phones/:phoneId
+ *
+ * Update a phone
+ */
+app.patch("/phones/:phoneId", async (req, res) => {
+	const phoneId = Number(req.params.phoneId);
+
+	try {
+		const phone = await prisma.phones.update({
+			where: { id: phoneId },
+			data: req.body,
+		});
+		res.send(phone);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
  * --------------------------------------------------------
  * Users
  * --------------------------------------------------------
@@ -280,6 +301,27 @@ app.get("/users/:userId", async (req, res) => {
 		});
 
 		// Hello, this is dog 🐶
+		res.send(user);
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({ message: "Something went wrong when querying the database" });
+	}
+});
+
+/**
+ * PATCH /users/:userId
+ *
+ * Update a user
+ */
+app.patch("/users/:userId", async (req, res) => {
+	const userId = Number(req.params.userId);
+
+	try {
+		const user = await prisma.users.update({
+			where: { id: userId },
+			data: req.body,
+		});
 		res.send(user);
 
 	} catch (err) {

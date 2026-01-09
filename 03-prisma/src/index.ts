@@ -197,6 +197,10 @@ app.post("/phones", async (req, res) => {
  */
 app.get("/phones/:phoneId", async (req, res) => {
 	const phoneId = Number(req.params.phoneId);
+	if (!phoneId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		// Find phone based on the unique id
@@ -225,6 +229,10 @@ app.get("/phones/:phoneId", async (req, res) => {
  */
 app.patch("/phones/:phoneId", async (req, res) => {
 	const phoneId = Number(req.params.phoneId);
+	if (!phoneId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		const phone = await prisma.phones.update({
@@ -246,6 +254,10 @@ app.patch("/phones/:phoneId", async (req, res) => {
  */
 app.delete("/phones/:phoneId", async (req, res) => {
 	const phoneId = Number(req.params.phoneId);
+	if (!phoneId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		await prisma.phones.delete({
@@ -308,6 +320,10 @@ app.post("/users", async (req, res) => {
  */
 app.get("/users/:userId", async (req, res) => {
 	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		// Find user based on the unique id
@@ -336,6 +352,10 @@ app.get("/users/:userId", async (req, res) => {
  */
 app.patch("/users/:userId", async (req, res) => {
 	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		const user = await prisma.users.update({
@@ -357,6 +377,10 @@ app.patch("/users/:userId", async (req, res) => {
  */
 app.delete("/users/:userId", async (req, res) => {
 	const userId = Number(req.params.userId);
+	if (!userId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		await prisma.users.delete({

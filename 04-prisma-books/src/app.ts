@@ -1,25 +1,14 @@
 import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
-import { authorsRouter } from "./routes/authors.router.ts";
-import { booksRouter } from "./routes/books.router.ts";
+import { rootRouter } from "./routes/root.router.ts";
 
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 
-/**
- * GET /
- */
-app.get("/", (_req, res) => {
-	res.send({ message: "I AM API, BEEP BOOP" });
-});
-
-// Authors router
-app.use("/authors", authorsRouter);
-
-// Books router
-app.use("/books", booksRouter);
+// Use dem routes
+app.use(rootRouter);
 
 /**
  * Catch-all route 🛟

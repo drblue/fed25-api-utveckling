@@ -10,7 +10,7 @@ export const authorsRouter = express.Router();
  *
  * Get all authors
  */
-authorsRouter.get("/authors", async (_req, res) => {
+authorsRouter.get("/", async (_req, res) => {
 	try {
 		const authors = await prisma.author.findMany();
 		res.send(authors);
@@ -25,7 +25,7 @@ authorsRouter.get("/authors", async (_req, res) => {
  *
  * Get a single author
  */
-authorsRouter.get("/authors/:authorId", async (req, res) => {
+authorsRouter.get("/:authorId", async (req, res) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -53,7 +53,7 @@ authorsRouter.get("/authors/:authorId", async (req, res) => {
  *
  * Create an author
  */
-authorsRouter.post("/authors", async (req, res) => {
+authorsRouter.post("/", async (req, res) => {
 	try {
 		const author = await prisma.author.create({
 			data: req.body,
@@ -70,7 +70,7 @@ authorsRouter.post("/authors", async (req, res) => {
  *
  * Update a single author
  */
-authorsRouter.patch("/authors/:authorId", async (req, res) => {
+authorsRouter.patch("/:authorId", async (req, res) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -96,7 +96,7 @@ authorsRouter.patch("/authors/:authorId", async (req, res) => {
  *
  * Delete a single author
  */
-authorsRouter.delete("/authors/:authorId", async (req, res) => {
+authorsRouter.delete("/:authorId", async (req, res) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
 		res.status(400).send({ message: "Invalid Id" });

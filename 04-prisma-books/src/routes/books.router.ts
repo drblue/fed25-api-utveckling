@@ -10,7 +10,7 @@ export const booksRouter = express.Router();
  *
  * Get all books
  */
-booksRouter.get("/books", async (_req, res) => {
+booksRouter.get("/", async (_req, res) => {
 	try {
 		const books = await prisma.book.findMany();
 		res.send(books);
@@ -25,7 +25,7 @@ booksRouter.get("/books", async (_req, res) => {
  *
  * Get a single book
  */
-booksRouter.get("/books/:bookId", async (req, res) => {
+booksRouter.get("/:bookId", async (req, res) => {
 	const bookId = Number(req.params.bookId);
 	if (!bookId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -53,7 +53,7 @@ booksRouter.get("/books/:bookId", async (req, res) => {
  *
  * Create an book
  */
-booksRouter.post("/books", async (req, res) => {
+booksRouter.post("/", async (req, res) => {
 	try {
 		const book = await prisma.book.create({
 			data: req.body,
@@ -70,7 +70,7 @@ booksRouter.post("/books", async (req, res) => {
  *
  * Update a single book
  */
-booksRouter.patch("/books/:bookId", async (req, res) => {
+booksRouter.patch("/:bookId", async (req, res) => {
 	const bookId = Number(req.params.bookId);
 	if (!bookId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -96,7 +96,7 @@ booksRouter.patch("/books/:bookId", async (req, res) => {
  *
  * Delete a single book
  */
-booksRouter.delete("/books/:bookId", async (req, res) => {
+booksRouter.delete("/:bookId", async (req, res) => {
 	const bookId = Number(req.params.bookId);
 	if (!bookId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -121,7 +121,7 @@ booksRouter.delete("/books/:bookId", async (req, res) => {
  *
  * Add author(s) to book
  */
-booksRouter.post("/books/:bookId/authors", async (req, res) => {
+booksRouter.post("/:bookId/authors", async (req, res) => {
 	const bookId = Number(req.params.bookId);
 	if (!bookId) {
 		res.status(400).send({ message: "Invalid Id" });
@@ -154,7 +154,7 @@ booksRouter.post("/books/:bookId/authors", async (req, res) => {
  *
  * Remove author from book
  */
-booksRouter.delete("/books/:bookId/authors/:authorId", async (req, res) => {
+booksRouter.delete("/:bookId/authors/:authorId", async (req, res) => {
 	const bookId = Number(req.params.bookId);
 	const authorId = Number(req.params.authorId);
 	if (!bookId || !authorId) {

@@ -16,10 +16,10 @@ app.get("/", (_req, res) => {
 });
 
 // Authors router
-app.use(authorsRouter);
+app.use("/authors", authorsRouter);
 
 // Books router
-app.use(booksRouter);
+app.use("/books", booksRouter);
 
 /**
  * Catch-all route 🛟

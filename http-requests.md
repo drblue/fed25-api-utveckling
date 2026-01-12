@@ -16,6 +16,21 @@
 - 4xx = Client made a bo-bo
 - 5xx = Server made a bo-bo
 
+## Common HTTP Codes
+
+```text
+200 = OK
+201 = Created
+202 = Accepted
+204 = No Content
+400 = Bad Request
+401 = Unauthorized
+403 = Forbidden
+404 = Not Found
+405 = Method Not Allowed
+500 = Internal Server Error
+```
+
 ## JSON
 
 JavaScript Object Notation

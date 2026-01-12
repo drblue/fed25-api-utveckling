@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Author {
-  id    Int    @id @default(autoincrement()) @db.UnsignedInt
-  name  String
-  books Book[]
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  name      String
+  birthyear Int?   @db.UnsignedInt
+  books     Book[]
 }
 
 model Book {
   id      Int      @id @default(autoincrement()) @db.UnsignedInt
   title   String
   pages   Int      @db.UnsignedInt
-  isbn    String?
   authors Author[]
 }

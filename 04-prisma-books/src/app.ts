@@ -47,6 +47,9 @@ app.get("/authors/:authorId", async (req, res) => {
 			where: {
 				id: authorId,
 			},
+			include: {
+				books: true,
+			},
 		});
 		res.send(author);
 
@@ -155,6 +158,9 @@ app.get("/books/:bookId", async (req, res) => {
 			where: {
 				id: bookId,
 			},
+			include: {
+				authors: true,
+			},
 		});
 		res.send(book);
 
@@ -225,6 +231,39 @@ app.delete("/books/:bookId", async (req, res) => {
 			},
 		});
 		res.status(204).send();
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+});
+
+/**
+ * POST /books/:bookId/authors
+ *
+ * Link book to author(s)
+ */
+app.post("/books/:bookId/authors", async (req, res) => {
+	const bookId = Number(req.params.bookId);
+	if (!bookId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		const book = await prisma.book.update({
+			where: {
+				id: bookId,
+			},
+			data: {
+				authors: {
+					connect: req.body,  // { "id": 9 }
+				}
+			},
+			include: {
+				authors: true,
+			},
+		});
+		res.status(201).send(book);
 
 	} catch (err) {
 		handlePrismaError(res, err);

@@ -34,8 +34,22 @@ npx prisma generate
 
 During prototyping, run `npx prisma db push` to push the schema to the database.
 
-Once the API is deployed, **DO NOT EVER RUN** `npx prisma db push` - instead use
-migrations (which we'll talk about next week)!
+~~Once the API is deployed, **DO NOT EVER RUN** `npx prisma db push` - instead use
+migrations (which we'll talk about next week)!~~~
+
+Create an initial migration if you don't already have one:
+
+```bash
+npx prisma migrate dev --name "init"
+```
+
+This will delete all your current data and recreate the tables, so DO NOT RUN `npx prisma db push` from now on, otherwise the migrations will be out of sync and you'll get a migraine.
+
+Create new migrations after each schema change:
+
+```bash
+npx prisma migrate dev --name "describe change here"
+```
 
 ## Setup from scratch
 

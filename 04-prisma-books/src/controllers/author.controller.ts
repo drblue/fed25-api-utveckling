@@ -17,3 +17,91 @@ export const index = async (_req: Request, res: Response) => {
 		handlePrismaError(res, err);
 	}
 }
+
+/**
+ * Get a single author
+ */
+export const show = async (req: Request, res: Response) => {
+	const authorId = Number(req.params.authorId);
+	if (!authorId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		const author = await prisma.author.findUniqueOrThrow({
+			where: {
+				id: authorId,
+			},
+			include: {
+				books: true,
+			},
+		});
+		res.send(author);
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+}
+
+/**
+ * Create an author
+ */
+export const store = async (req: Request, res: Response) => {
+	try {
+		const author = await prisma.author.create({
+			data: req.body,
+		});
+		res.status(201).send(author);
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+}
+
+/**
+ * Update a single author
+ */
+export const update = async (req: Request, res: Response) => {
+	const authorId = Number(req.params.authorId);
+	if (!authorId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		const author = await prisma.author.update({
+			where: {
+				id: authorId,
+			},
+			data: req.body,
+		});
+		res.send(author);
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+}
+
+/**
+ * Delete a single author
+ */
+export const destroy = async (req: Request, res: Response) => {
+	const authorId = Number(req.params.authorId);
+	if (!authorId) {
+		res.status(400).send({ message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		await prisma.author.delete({
+			where: {
+				id: authorId,
+			},
+		});
+		res.status(204).send();
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+}

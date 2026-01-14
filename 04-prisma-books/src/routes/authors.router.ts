@@ -1,4 +1,5 @@
 import express from "express";
+import { index } from "../controllers/author.controller.ts";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
 
@@ -10,15 +11,7 @@ export const authorsRouter = express.Router();
  *
  * Get all authors
  */
-authorsRouter.get("/", async (_req, res) => {
-	try {
-		const authors = await prisma.author.findMany();
-		res.send(authors);
-
-	} catch (err) {
-		handlePrismaError(res, err);
-	}
-});
+authorsRouter.get("/", index);
 
 /**
  * GET /authors/:authorId

@@ -39,6 +39,7 @@ booksRouter.get("/:bookId", async (req, res) => {
 			},
 			include: {
 				authors: true,
+				publisher: true,
 			},
 		});
 		res.send(book);

@@ -32,7 +32,7 @@ authorsRouter.post("/", [
 
 	body("birthyear")
 		.optional()
-		.isInt().withMessage("has to be an integer"),
+		.isInt({ min: 1440 }).withMessage("has to be an integer and at least 1440"),
 ], store);
 
 /**
@@ -49,7 +49,7 @@ authorsRouter.patch("/:authorId", [
 
 	body("birthyear")
 		.optional()
-		.isInt().withMessage("has to be an integer"),
+		.isInt({ min: 1440 }).withMessage("has to be an integer and at least 1440"),
 ], update);
 
 /**

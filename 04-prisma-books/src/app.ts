@@ -16,7 +16,7 @@ app.use(rootRouter);
  * Catch-all route 🛟
  */
 app.use((req, res) => {
-	res.status(404).send({ message: `Cannot ${req.method} ${req.path}` });
+	res.status(404).send({ status: "error", message: `Cannot ${req.method} ${req.path}` });
 });
 
 export default app;

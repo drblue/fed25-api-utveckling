@@ -10,7 +10,7 @@ export const rootRouter = express.Router();
  * GET /
  */
 rootRouter.get("/", (_req, res) => {
-	res.send({ message: "I AM BOOKS API, BEEP BOOP" });
+	res.send({ status: "success", data: { message: "I AM BOOKS API, BEEP BOOP" }});
 });
 
 // Authors router

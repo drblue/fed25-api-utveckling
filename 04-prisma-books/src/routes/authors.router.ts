@@ -1,4 +1,5 @@
 import express from "express";
+import { body } from "express-validator";
 import { destroy, index, show, store, update } from "../controllers/author.controller.ts";
 
 // Create a Author router
@@ -23,7 +24,10 @@ authorsRouter.get("/:authorId", show);
  *
  * Create an author
  */
-authorsRouter.post("/", store);
+authorsRouter.post("/", [
+	body("name").isString().trim().isLength({ min: 3, max: 191 }),
+	body("birthyear").optional().isInt(),
+], store);
 
 /**
  * PATCH /authors/:authorId

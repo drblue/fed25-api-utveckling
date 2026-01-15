@@ -25,8 +25,14 @@ authorsRouter.get("/:authorId", show);
  * Create an author
  */
 authorsRouter.post("/", [
-	body("name").isString().trim().isLength({ min: 3, max: 191 }),
-	body("birthyear").optional().isInt(),
+	body("name")
+		.isString().withMessage("has to be a string").bail()
+		.trim()
+		.isLength({ min: 3, max: 191 }),
+
+	body("birthyear")
+		.optional()
+		.isInt().withMessage("has to be an integer"),
 ], store);
 
 /**

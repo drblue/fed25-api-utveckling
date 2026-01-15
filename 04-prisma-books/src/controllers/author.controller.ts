@@ -2,9 +2,10 @@
  * Author Controller
  */
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
+import { CreateAuthorData } from "../types/Author.types.ts";
 
 /**
  * Get all authors
@@ -57,8 +58,11 @@ export const store = async (req: Request, res: Response) => {
 	}
 
 	try {
+		// Get only the validated data
+		const validatedData = matchedData<CreateAuthorData>(req);
+
 		const author = await prisma.author.create({
-			data: req.body,
+			data: validatedData,
 		});
 		res.status(201).send({ status: "success", data: author });
 
@@ -84,12 +88,15 @@ export const update = async (req: Request, res: Response) => {
 		return;
 	}
 
+	// Get only the validated data
+	const validatedData = matchedData<CreateAuthorData>(req);
+
 	try {
 		const author = await prisma.author.update({
 			where: {
 				id: authorId,
 			},
-			data: req.body,
+			data: validatedData,
 		});
 		res.send({ status: "success", data: author });
 

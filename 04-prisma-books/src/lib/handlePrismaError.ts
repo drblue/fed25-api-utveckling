@@ -9,7 +9,7 @@ export const handlePrismaError = (res: Response, err: unknown) => {
 		// Was it not found?
 		if (err.code === "P2025") {
 			console.debug("Resource not found", err);
-			res.status(404).send({ message: "Resource not found" });
+			res.status(404).send({ status: "error", message: "Resource not found" });
 			return;
 		}
 	}
@@ -17,11 +17,11 @@ export const handlePrismaError = (res: Response, err: unknown) => {
 	// Prisma validation error
 	if (err instanceof Prisma.PrismaClientValidationError) {
 		console.debug("Invalid request data", err);
-		res.status(400).send({ message: "Invalid request data" });
+		res.status(400).send({ status: "error", message: "Invalid request data" });
 		return;
 	}
 
 	// Fallback
 	console.error(err);
-	res.status(500).send({ message: "Something went wrong when querying the database" });
+	res.status(500).send({ status: "error", message: "Something went wrong when querying the database" });
 }

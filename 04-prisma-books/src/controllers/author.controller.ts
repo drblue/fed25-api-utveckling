@@ -12,7 +12,7 @@ import { prisma } from "../lib/prisma.ts";
 export const index = async (_req: Request, res: Response) => {
 	try {
 		const authors = await prisma.author.findMany();
-		res.send(authors);
+		res.send({ status: "success", data: authors });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -25,7 +25,7 @@ export const index = async (_req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
-		res.status(400).send({ message: "Invalid Id" });
+		res.status(400).send({ status: "error", message: "Invalid Id" });
 		return;
 	}
 
@@ -38,7 +38,7 @@ export const show = async (req: Request, res: Response) => {
 				books: true,
 			},
 		});
-		res.send(author);
+		res.send({ status: "success", data: author });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -60,7 +60,7 @@ export const store = async (req: Request, res: Response) => {
 		const author = await prisma.author.create({
 			data: req.body,
 		});
-		res.status(201).send(author);
+		res.status(201).send({ status: "success", data: author });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -73,7 +73,7 @@ export const store = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
-		res.status(400).send({ message: "Invalid Id" });
+		res.status(400).send({ status: "error", message: "Invalid Id" });
 		return;
 	}
 
@@ -84,7 +84,7 @@ export const update = async (req: Request, res: Response) => {
 			},
 			data: req.body,
 		});
-		res.send(author);
+		res.send({ status: "success", data: author });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -97,7 +97,7 @@ export const update = async (req: Request, res: Response) => {
 export const destroy = async (req: Request, res: Response) => {
 	const authorId = Number(req.params.authorId);
 	if (!authorId) {
-		res.status(400).send({ message: "Invalid Id" });
+		res.status(400).send({ status: "error", message: "Invalid Id" });
 		return;
 	}
 

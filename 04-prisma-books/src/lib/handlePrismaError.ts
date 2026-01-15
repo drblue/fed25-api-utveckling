@@ -6,6 +6,13 @@ import { Prisma } from "../../generated/prisma/client.ts";
  */
 export const handlePrismaError = (res: Response, err: unknown) => {
 	if (err instanceof Prisma.PrismaClientKnownRequestError) {
+		// Was the value out of range?
+		if (err.code === "P2020") {
+			console.debug("Value out of range", err);
+			res.status(400).send({ status: "error", message: "Value out of range" });
+			return;
+		}
+
 		// Was it not found?
 		if (err.code === "P2025") {
 			console.debug("Resource not found", err);

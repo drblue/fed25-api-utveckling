@@ -25,7 +25,20 @@ export const register = async (req: Request, res: Response) => {
 	console.log("hashed password:", hashed_password);
 
 	// Create the user in the database
+	try {
+		// plz computah, create user, mkai?
+		const user = await prisma.user.create({
+			data: {
+				name: validatedData.name,
+				email: validatedData.email,
+				password: hashed_password,
+			},
+		});
 
-	// Respond with 201 Created + status success
-	res.status(201).send({ status: "success", data: null });
+		// Respond with 201 Created + status success
+		res.status(201).send({ status: "success", data: user });
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
 }

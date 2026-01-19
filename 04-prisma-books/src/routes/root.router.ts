@@ -2,6 +2,7 @@ import express from "express";
 import { authRouter } from "./auth.router.ts";
 import { authorsRouter } from "./authors.router.ts";
 import { booksRouter } from "./books.router.ts";
+import { profileRouter } from "./profile.router.ts";
 import { publishersRouter } from "./publishers.router.ts";
 
 // Create a Root router
@@ -25,3 +26,6 @@ rootRouter.use("/publishers", publishersRouter);
 
 // Auth router
 rootRouter.use(authRouter);
+
+// Profile router
+rootRouter.use("/profile", profileRouter);

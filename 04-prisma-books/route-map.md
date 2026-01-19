@@ -54,6 +54,10 @@ Creates a new `User`.
 
 Gets the authenticated `User`.
 
+### `PATCH /profile`
+
+Update the authenticated `User`.
+
 ### `GET /profile/books`
 
 Gets the authenticated `User`'s `Book`s.

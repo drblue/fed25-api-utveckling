@@ -2,6 +2,7 @@
  * Validation rules for User model
  */
 import { body } from "express-validator";
+import { prisma } from "../lib/prisma.ts";
 
 export const createUserRules = [
 	body("name")
@@ -11,7 +12,19 @@ export const createUserRules = [
 
 	body("email")
 		.trim()
-		.isEmail().withMessage("has to be a valid email (duh)"),
+		.isEmail().withMessage("has to be a valid email (duh)").bail()
+		.custom(async (value: string) => {
+			// Check if email exists in the database
+			const user = await prisma.user.findUnique({
+				where: { email: value },
+			});
+
+			// If a user with that email was found, throw an error
+			if (user) {
+				// return Promise.reject("Email already exists");
+				throw new Error("Email already exists");
+			}
+		}),
 
 	body("password")
 		.isString().withMessage("has to be a string").bail()

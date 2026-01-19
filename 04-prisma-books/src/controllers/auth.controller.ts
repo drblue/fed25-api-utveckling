@@ -1,6 +1,7 @@
 /**
  * Auth Controller
  */
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
@@ -16,6 +17,9 @@ export const register = async (req: Request, res: Response) => {
 	console.log("validatedData:", validatedData);
 
 	// Calculate a hash + salt for the password
+	const hashed_password = await bcrypt.hash(validatedData.password, 10);
+	console.log("plaintext password:", validatedData.password);
+	console.log("hashed password:", hashed_password);
 
 	// Create the user in the database
 

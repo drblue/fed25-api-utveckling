@@ -1,5 +1,7 @@
 import express from "express";
 import { register } from "../controllers/auth.controller.ts";
+import { createUserRules } from "../rules/user.rules.ts";
+import { validateRequest } from "../middlewares/validateRequest.ts";
 
 // Create a Resource router
 export const authRouter = express.Router();
@@ -9,4 +11,4 @@ export const authRouter = express.Router();
  *
  * Register a new user
  */
-authRouter.post("/register", register);
+authRouter.post("/register", createUserRules, validateRequest, register);

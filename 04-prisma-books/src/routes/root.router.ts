@@ -1,4 +1,5 @@
 import express from "express";
+import { authRouter } from "./auth.router.ts";
 import { authorsRouter } from "./authors.router.ts";
 import { booksRouter } from "./books.router.ts";
 import { publishersRouter } from "./publishers.router.ts";
@@ -21,3 +22,6 @@ rootRouter.use("/books", booksRouter);
 
 // Publishers router
 rootRouter.use("/publishers", publishersRouter);
+
+// Auth router
+rootRouter.use(authRouter);

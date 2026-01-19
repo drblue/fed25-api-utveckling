@@ -8,6 +8,9 @@ import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
 import { CreateUserData } from "../types/User.types.ts";
 
+// Get salt rounds from environment
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
+
 /**
  * Register a User
  */
@@ -17,7 +20,7 @@ export const register = async (req: Request, res: Response) => {
 	console.log("validatedData:", validatedData);
 
 	// Calculate a hash + salt for the password
-	const hashed_password = await bcrypt.hash(validatedData.password, 10);
+	const hashed_password = await bcrypt.hash(validatedData.password, SALT_ROUNDS);
 	console.log("plaintext password:", validatedData.password);
 	console.log("hashed password:", hashed_password);
 

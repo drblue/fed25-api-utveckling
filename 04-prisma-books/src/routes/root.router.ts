@@ -1,4 +1,5 @@
 import express from "express";
+import { basic } from "../middlewares/auth/basic.ts";
 import { authRouter } from "./auth.router.ts";
 import { authorsRouter } from "./authors.router.ts";
 import { booksRouter } from "./books.router.ts";
@@ -28,4 +29,4 @@ rootRouter.use("/publishers", publishersRouter);
 rootRouter.use(authRouter);
 
 // Profile router
-rootRouter.use("/profile", profileRouter);
+rootRouter.use("/profile", basic, profileRouter);

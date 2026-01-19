@@ -11,7 +11,7 @@ import { prisma } from "../lib/prisma.ts";
 export const index = async (_req: Request, res: Response) => {
 	try {
 		const publishers = await prisma.publisher.findMany();
-		res.send(publishers);
+		res.send({ status: "success", data: publishers });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -37,7 +37,7 @@ export const show = async (req: Request, res: Response) => {
 				books: true,
 			},
 		});
-		res.send(publisher);
+		res.send({ status: "success", data: publisher });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -52,7 +52,7 @@ export const store = async (req: Request, res: Response) => {
 		const publisher = await prisma.publisher.create({
 			data: req.body,
 		});
-		res.status(201).send(publisher);
+		res.status(201).send({ status: "success", data: publisher });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -76,7 +76,7 @@ export const update = async (req: Request, res: Response) => {
 			},
 			data: req.body,
 		});
-		res.send(publisher);
+		res.send({ status: "success", data: publisher });
 
 	} catch (err) {
 		handlePrismaError(res, err);

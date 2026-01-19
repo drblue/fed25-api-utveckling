@@ -11,7 +11,7 @@ import { prisma } from "../lib/prisma.ts";
 export const index = async (_req: Request, res: Response) => {
 	try {
 		const books = await prisma.book.findMany();
-		res.send(books);
+		res.send({ status: "success", data: books });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -38,7 +38,7 @@ export const show = async (req: Request, res: Response) => {
 				publisher: true,
 			},
 		});
-		res.send(book);
+		res.send({ status: "success", data: book });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -53,7 +53,7 @@ export const store = async (req: Request, res: Response) => {
 		const book = await prisma.book.create({
 			data: req.body,
 		});
-		res.status(201).send(book);
+		res.status(201).send({ status: "success", data: book });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -77,7 +77,7 @@ export const update = async (req: Request, res: Response) => {
 			},
 			data: req.body,
 		});
-		res.send(book);
+		res.send({ status: "success", data: book });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -131,7 +131,7 @@ export const addAuthor = async (req: Request, res: Response) => {
 				authors: true,
 			},
 		});
-		res.status(201).send(book);
+		res.status(201).send({ status: "success", data: book });
 
 	} catch (err) {
 		handlePrismaError(res, err);
@@ -165,7 +165,7 @@ export const removeAuthor = async (req: Request, res: Response) => {
 				authors: true,
 			},
 		});
-		res.status(200).send(book);
+		res.status(200).send({ status: "success", data: book });
 
 	} catch (err) {
 		handlePrismaError(res, err);

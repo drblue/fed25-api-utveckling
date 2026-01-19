@@ -1,6 +1,7 @@
 import express from "express";
 import { destroy, index, show, store, update } from "../controllers/author.controller.ts";
 import { createAuthorRules, updateAuthorRules } from "../rules/author.rules.ts";
+import { validateRequest } from "../middlewares/validateRequest.ts";
 
 // Create a Author router
 export const authorsRouter = express.Router();
@@ -24,14 +25,14 @@ authorsRouter.get("/:authorId", show);
  *
  * Create an author
  */
-authorsRouter.post("/", createAuthorRules, store);
+authorsRouter.post("/", createAuthorRules, validateRequest, store);
 
 /**
  * PATCH /authors/:authorId
  *
  * Update a single author
  */
-authorsRouter.patch("/:authorId", updateAuthorRules, update);
+authorsRouter.patch("/:authorId", updateAuthorRules, validateRequest, update);
 
 /**
  * DELETE /authors/:authorId

@@ -2,8 +2,10 @@
  * Book Controller
  */
 import { Request, Response } from "express";
+import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
+import { CreateBookData, UpdateBookData } from "../types/Book.types.ts";
 
 /**
  * Get all books
@@ -49,9 +51,12 @@ export const show = async (req: Request, res: Response) => {
  * Create an book
  */
 export const store = async (req: Request, res: Response) => {
+	// Get only the validated data
+	const validatedData = matchedData<CreateBookData>(req);
+
 	try {
 		const book = await prisma.book.create({
-			data: req.body,
+			data: validatedData,
 		});
 		res.status(201).send({ status: "success", data: book });
 
@@ -70,12 +75,15 @@ export const update = async (req: Request, res: Response) => {
 		return;
 	}
 
+	// Get only the validated data
+	const validatedData = matchedData<UpdateBookData>(req);
+
 	try {
 		const book = await prisma.book.update({
 			where: {
 				id: bookId,
 			},
-			data: req.body,
+			data: validatedData,
 		});
 		res.send({ status: "success", data: book });
 

@@ -2,8 +2,10 @@
  * Publisher Controller
  */
 import { Request, Response } from "express";
+import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
+import { CreatePublisherData, UpdatePublisherData } from "../types/Publisher.types.ts";
 
 /**
  * Get all publishers
@@ -48,9 +50,12 @@ export const show = async (req: Request, res: Response) => {
  * Create an publisher
  */
 export const store = async (req: Request, res: Response) => {
+	// Get only the validated data
+	const validatedData = matchedData<CreatePublisherData>(req);
+
 	try {
 		const publisher = await prisma.publisher.create({
-			data: req.body,
+			data: validatedData,
 		});
 		res.status(201).send({ status: "success", data: publisher });
 
@@ -69,12 +74,15 @@ export const update = async (req: Request, res: Response) => {
 		return;
 	}
 
+	// Get only the validated data
+	const validatedData = matchedData<UpdatePublisherData>(req);
+
 	try {
 		const publisher = await prisma.publisher.update({
 			where: {
 				id: publisherId,
 			},
-			data: req.body,
+			data: validatedData,
 		});
 		res.send({ status: "success", data: publisher });
 

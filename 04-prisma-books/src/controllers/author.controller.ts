@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { prisma } from "../lib/prisma.ts";
-import { CreateAuthorData } from "../types/Author.types.ts";
+import { CreateAuthorData, UpdateAuthorData } from "../types/Author.types.ts";
 
 /**
  * Get all authors
@@ -50,10 +50,10 @@ export const show = async (req: Request, res: Response) => {
  * Create an author
  */
 export const store = async (req: Request, res: Response) => {
-	try {
-		// Get only the validated data
-		const validatedData = matchedData<CreateAuthorData>(req);
+	// Get only the validated data
+	const validatedData = matchedData<CreateAuthorData>(req);
 
+	try {
 		const author = await prisma.author.create({
 			data: validatedData,
 		});
@@ -75,7 +75,7 @@ export const update = async (req: Request, res: Response) => {
 	}
 
 	// Get only the validated data
-	const validatedData = matchedData<CreateAuthorData>(req);
+	const validatedData = matchedData<UpdateAuthorData>(req);
 
 	try {
 		const author = await prisma.author.update({

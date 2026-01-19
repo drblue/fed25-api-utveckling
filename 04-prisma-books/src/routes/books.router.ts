@@ -1,5 +1,7 @@
 import express from "express";
 import { addAuthor, destroy, index, removeAuthor, show, store, update } from "../controllers/book.controller.ts";
+import { createBookRules, updateBookRules } from "../rules/book.rules.ts";
+import { validateRequest } from "../middlewares/validateRequest.ts";
 
 // Create a Books router
 export const booksRouter = express.Router();
@@ -23,14 +25,14 @@ booksRouter.get("/:bookId", show);
  *
  * Create an book
  */
-booksRouter.post("/", store);
+booksRouter.post("/", createBookRules, validateRequest, store);
 
 /**
  * PATCH /books/:bookId
  *
  * Update a single book
  */
-booksRouter.patch("/:bookId", update);
+booksRouter.patch("/:bookId", updateBookRules, validateRequest, update);
 
 /**
  * DELETE /books/:bookId

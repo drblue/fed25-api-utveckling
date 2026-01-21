@@ -4,7 +4,7 @@
 import { Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
-import { prisma } from "../lib/prisma.ts";
+import { createAuthor, deleteAuthor, getAuthor, getAuthors, updateAuthor } from "../services/author.service.ts";
 import { CreateAuthorData, UpdateAuthorData } from "../types/Author.types.ts";
 
 /**
@@ -12,7 +12,7 @@ import { CreateAuthorData, UpdateAuthorData } from "../types/Author.types.ts";
  */
 export const index = async (_req: Request, res: Response) => {
 	try {
-		const authors = await prisma.author.findMany();
+		const authors = await getAuthors();
 		res.send({ status: "success", data: authors });
 
 	} catch (err) {
@@ -31,14 +31,7 @@ export const show = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const author = await prisma.author.findUniqueOrThrow({
-			where: {
-				id: authorId,
-			},
-			include: {
-				books: true,
-			},
-		});
+		const author = await getAuthor(authorId);
 		res.send({ status: "success", data: author });
 
 	} catch (err) {
@@ -54,9 +47,7 @@ export const store = async (req: Request, res: Response) => {
 	const validatedData = matchedData<CreateAuthorData>(req);
 
 	try {
-		const author = await prisma.author.create({
-			data: validatedData,
-		});
+		const author = await createAuthor(validatedData);
 		res.status(201).send({ status: "success", data: author });
 
 	} catch (err) {
@@ -78,12 +69,7 @@ export const update = async (req: Request, res: Response) => {
 	const validatedData = matchedData<UpdateAuthorData>(req);
 
 	try {
-		const author = await prisma.author.update({
-			where: {
-				id: authorId,
-			},
-			data: validatedData,
-		});
+		const author = await updateAuthor(authorId, validatedData);
 		res.send({ status: "success", data: author });
 
 	} catch (err) {
@@ -102,11 +88,7 @@ export const destroy = async (req: Request, res: Response) => {
 	}
 
 	try {
-		await prisma.author.delete({
-			where: {
-				id: authorId,
-			},
-		});
+		await deleteAuthor(authorId);
 		res.status(204).send();
 
 	} catch (err) {

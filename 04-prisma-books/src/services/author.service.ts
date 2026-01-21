@@ -2,11 +2,13 @@
  * Author Service
  */
 import { prisma } from "../lib/prisma.ts";
+import { CreateAuthorData, UpdateAuthorData } from "../types/Author.types.ts";
 
 /**
  * Get all authors
  */
-export const getAuthors = async () => {
+export const getAuthors = () => {
+	return prisma.author.findMany();
 }
 
 /**
@@ -14,7 +16,15 @@ export const getAuthors = async () => {
  *
  * @param authorId The ID of the Author to get
  */
-export const getAuthor = async (authorId: number) => {
+export const getAuthor = (authorId: number) => {
+	return prisma.author.findUniqueOrThrow({
+		where: {
+			id: authorId,
+		},
+		include: {
+			books: true,
+		},
+	});
 }
 
 /**
@@ -22,7 +32,10 @@ export const getAuthor = async (authorId: number) => {
  *
  * @param data Author data
  */
-export const createAuthor = async (data) => {
+export const createAuthor = async (data: CreateAuthorData) => {
+	return prisma.author.create({
+		data,
+	});
 }
 
 /**
@@ -32,7 +45,13 @@ export const createAuthor = async (data) => {
  * @param data Author data
  * @returns
  */
-export const updateAuthor = async (authorId: number, data) => {
+export const updateAuthor = async (authorId: number, data: UpdateAuthorData) => {
+	return prisma.author.update({
+		where: {
+			id: authorId,
+		},
+		data,
+	});
 }
 
 /**
@@ -41,4 +60,9 @@ export const updateAuthor = async (authorId: number, data) => {
  * @param authorId The ID of the Author to delete
  */
 export const deleteAuthor = async (authorId: number) => {
+	return prisma.author.delete({
+		where: {
+			id: authorId,
+		}
+	});
 }

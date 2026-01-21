@@ -1,6 +1,7 @@
 /**
  * HTTP Basic Authentication Middleware
  */
+import bcrypt from "bcrypt";
 import Debug from "debug";
 import { NextFunction, Request, Response } from "express";
 import { decodeBase64 } from "../../lib/base64.ts";
@@ -58,9 +59,15 @@ export const basic = async (req: Request, res: Response, next: NextFunction) => 
 		return;
 	}
 
-	debug("Found user: %o", user);
-
 	// 7. Verify hash against credentials, otherwise bail 🛑
+	debug("👌🏻 User did exist: %s", email);
+	const isPasswordCorrect = await bcrypt.compare(plaintextPassword, user.password);  // user.password is the hashed pwd from the database
+	if (!isPasswordCorrect) {
+		debug("Password for user %s was not correct", email);
+		res.status(401).send({ status: "fail", data: { message: "Authorization invalid" }});
+		return;
+	}
+	debug("✅ Password for user %s was correct 🥳", email);
 
 	// 8. Attach user to request
 

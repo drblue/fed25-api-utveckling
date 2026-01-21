@@ -1,10 +1,14 @@
 /**
  * HTTP Basic Authentication Middleware
  */
+import Debug from "debug";
 import { NextFunction, Request, Response } from "express";
 
+// Create a new debug instance
+const debug = Debug("prisma-books:auth:basic");
+
 export const basic = async (req: Request, res: Response, next: NextFunction) => {
-	console.log("Hello from auth/basic! 🙋🏽");
+	debug("Hello from auth/basic! 🙋🏽");
 
 	// 1. Make sure Authorization header exists, otherwise bail 🛑
 

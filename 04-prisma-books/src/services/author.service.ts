@@ -32,7 +32,7 @@ export const getAuthor = (authorId: number) => {
  *
  * @param data Author data
  */
-export const createAuthor = async (data: CreateAuthorData) => {
+export const createAuthor = (data: CreateAuthorData) => {
 	return prisma.author.create({
 		data,
 	});
@@ -45,7 +45,7 @@ export const createAuthor = async (data: CreateAuthorData) => {
  * @param data Author data
  * @returns
  */
-export const updateAuthor = async (authorId: number, data: UpdateAuthorData) => {
+export const updateAuthor = (authorId: number, data: UpdateAuthorData) => {
 	return prisma.author.update({
 		where: {
 			id: authorId,
@@ -59,7 +59,7 @@ export const updateAuthor = async (authorId: number, data: UpdateAuthorData) => 
  *
  * @param authorId The ID of the Author to delete
  */
-export const deleteAuthor = async (authorId: number) => {
+export const deleteAuthor = (authorId: number) => {
 	return prisma.author.delete({
 		where: {
 			id: authorId,

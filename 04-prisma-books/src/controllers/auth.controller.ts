@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
-import { prisma } from "../lib/prisma.ts";
 import { CreateUserData } from "../types/User.types.ts";
+import { createUser } from "../services/user.service.ts";
 
 // Get salt rounds from environment
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
@@ -27,12 +27,9 @@ export const register = async (req: Request, res: Response) => {
 	// Create the user in the database
 	try {
 		// plz computah, create user, mkai?
-		const user = await prisma.user.create({
-			data: {
-				name: validatedData.name,
-				email: validatedData.email,
-				password: hashed_password,
-			},
+		const user = await createUser({
+			...validatedData,
+			password: hashed_password,
 		});
 
 		// Respond with 201 Created + status success

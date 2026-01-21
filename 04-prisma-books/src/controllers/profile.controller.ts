@@ -33,3 +33,17 @@ export const getBooks = async (_req: Request, res: Response) => {
 export const updateProfile = async (_req: Request, res: Response) => {
 	res.status(501).send({ status: "success", data: null });
 }
+
+/**
+ * Add books to the authenticated user
+ */
+export const addBooks = async (_req: Request, res: Response) => {
+	res.status(501).send({ status: "success", data: null });
+}
+
+/**
+ * Remove book from the authenticated user
+ */
+export const removeBook = async (_req: Request, res: Response) => {
+	res.status(501).send({ status: "success", data: null });
+}

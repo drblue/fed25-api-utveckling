@@ -1,5 +1,5 @@
 import express from "express";
-import { getBooks, getProfile, updateProfile } from "../controllers/profile.controller.ts";
+import { addBooks, getBooks, getProfile, removeBook, updateProfile } from "../controllers/profile.controller.ts";
 
 // Create a Profile router
 export const profileRouter = express.Router();
@@ -12,6 +12,13 @@ export const profileRouter = express.Router();
 profileRouter.get("/", getProfile);
 
 /**
+ * PATCH /profile
+ *
+ * Update the authenticated user's profile
+ */
+profileRouter.patch("/", updateProfile);
+
+/**
  * GET /profile/books
  *
  * Get the authenticated user's books
@@ -19,8 +26,15 @@ profileRouter.get("/", getProfile);
 profileRouter.get("/books", getBooks);
 
 /**
- * PATCH /profile
+ * POST /profile/books
  *
- * Update the authenticated user's profile
+ * Add books to the authenticated user
  */
-profileRouter.patch("/", updateProfile);
+profileRouter.post("/books", addBooks);
+
+/**
+ * DELETE /profile/books/:bookId
+ *
+ * Remove book from the authenticated user
+ */
+profileRouter.delete("/books/:bookId", removeBook);

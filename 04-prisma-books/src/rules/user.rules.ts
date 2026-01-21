@@ -4,7 +4,21 @@
 import { body } from "express-validator";
 import { getUserByEmail } from "../services/user.service.ts";
 
-// TODO: Replace duplicate custom validator with a function
+/**
+ * Validate that a Email does not already exist
+ *
+ * @param value Email
+ * @returns
+ */
+const validateEmailDoesNotExist = async (value: string) => {
+	// get user by email
+	const user = await getUserByEmail(value);
+
+	if (user) {
+		// fail the validation if user already exists
+		throw new Error("Email already exists");
+	}
+}
 
 export const createUserRules = [
 	body("name")
@@ -15,16 +29,7 @@ export const createUserRules = [
 	body("email")
 		.trim()
 		.isEmail().withMessage("has to be a valid email (duh)").bail()
-		.custom(async (value: string) => {
-			// Check if email exists in the database
-			const user = await getUserByEmail(value);
-
-			// If a user with that email was found, throw an error
-			if (user) {
-				// return Promise.reject("Email already exists");
-				throw new Error("Email already exists");
-			}
-		}),
+		.custom(validateEmailDoesNotExist),
 
 	body("password")
 		.isString().withMessage("has to be a string").bail()
@@ -42,16 +47,7 @@ export const updateUserRules = [
 		.optional()
 		.trim()
 		.isEmail().withMessage("has to be a valid email (duh)").bail()
-		.custom(async (value: string) => {
-			// Check if email exists in the database
-			const user = await getUserByEmail(value);
-
-			// If a user with that email was found, throw an error
-			if (user) {
-				// return Promise.reject("Email already exists");
-				throw new Error("Email already exists");
-			}
-		}),
+		.custom(validateEmailDoesNotExist),
 
 	body("password")
 		.optional()

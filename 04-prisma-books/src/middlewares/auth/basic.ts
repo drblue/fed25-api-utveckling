@@ -3,6 +3,8 @@
  */
 import Debug from "debug";
 import { NextFunction, Request, Response } from "express";
+import { decodeBase64 } from "../../lib/base64.ts";
+import { getUserByEmail } from "../../services/user.service.ts";
 
 // Create a new debug instance
 const debug = Debug("prisma-books:auth:basic");
@@ -32,11 +34,31 @@ export const basic = async (req: Request, res: Response, next: NextFunction) => 
 	}
 
 	// 4. Decode credentials from base64 => ascii
-	debug("base64Payload:", base64Payload);
+	const decodedPayload = decodeBase64(base64Payload);
+	// decodedPayload = "johan@digitalvillage.se:appapp"
 
 	// 5. Split credentials on `:`
+	const [email, plaintextPassword] = decodedPayload.split(":");
+	debug("Email: %s", email);
+	debug("Password: %s", plaintextPassword);
+
+	// 5.5. Check that user sent email and password
+	// if not email OR not plaintextPassword
+	if (!email || !plaintextPassword) {
+		debug("User did not send email and/or password");
+		res.status(401).send({ status: "fail", data: { message: "Authorization Payload invalid" }});
+		return;
+	}
 
 	// 6. Get user from database, otherwise bail 🛑
+	const user = await getUserByEmail(email);
+	if (!user) {
+		debug("User %s does not exist", email);
+		res.status(401).send({ status: "fail", data: { message: "Authorization invalid" }});
+		return;
+	}
+
+	debug("Found user: %o", user);
 
 	// 7. Verify hash against credentials, otherwise bail 🛑
 

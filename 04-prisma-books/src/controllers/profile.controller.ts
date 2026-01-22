@@ -3,7 +3,7 @@
  */
 import { Request, Response } from "express";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
-import { getBooksByUserId } from "../services/book.service.ts";
+import { getUserBooks } from "../services/user.service.ts";
 
 /**
  * Get the authenticated user's profile
@@ -34,14 +34,12 @@ export const getBooks = async (req: Request, res: Response) => {
 	const userId = req.user.id;
 
 	try {
-		const books = await getBooksByUserId(userId);
+		const books = await getUserBooks(userId);
 		res.send({ status: "success", data: books });
 
 	} catch (err) {
 		handlePrismaError(res, err);
 	}
-
-	res.send({ status: "success", data: null });
 }
 
 /**

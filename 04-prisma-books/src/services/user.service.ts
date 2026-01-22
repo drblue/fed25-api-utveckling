@@ -2,6 +2,7 @@
  * User Service
  */
 import { prisma } from "../lib/prisma.ts";
+import { BookId } from "../types/Book.types.ts";
 import { CreateUserData } from "../types/User.types.ts";
 
 /**
@@ -40,6 +41,30 @@ export const getUserBooks = async (userId: number) => {
 		// include: {
 		// 	books: true,
 		// },
+	});
+
+	return user.books;
+}
+
+/**
+ * Add book(s) to user
+ *
+ * @param userId User ID
+ * @param bookIdOrBookIds Book ID(s) to add
+ */
+export const addBooksToUser = async (userId: number, bookIdOrBookIds: BookId | BookId[]) => {
+	const user = await prisma.user.update({
+		select: {
+			books: true,
+		},
+		where: {
+			id: userId,
+		},
+		data: {
+			books: {
+				connect: bookIdOrBookIds,
+			},
+		},
 	});
 
 	return user.books;

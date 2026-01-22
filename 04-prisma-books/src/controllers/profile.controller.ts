@@ -3,7 +3,7 @@
  */
 import { Request, Response } from "express";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
-import { addBooksToUser, getUserBooks } from "../services/user.service.ts";
+import { addBooksToUser, getUserBooks, removeBookFromUser } from "../services/user.service.ts";
 
 /**
  * Get the authenticated user's profile
@@ -72,6 +72,25 @@ export const addBooks = async (req: Request, res: Response) => {
 /**
  * Remove book from the authenticated user
  */
-export const removeBook = async (_req: Request, res: Response) => {
-	res.status(501).send({ status: "success", data: null });
+export const removeBook = async (req: Request, res: Response) => {
+	// If someone ever removes the authentication middleware from the route for this method, yell at them 😱
+	if (!req.user) {
+		throw new Error("Trying to access authenticated user but none exists. Did you remove authentication from this route? 🤬🤬🤬");
+	}
+
+	const bookId = Number(req.params.bookId);
+	const userId = req.user.id;
+
+	if (!bookId) {
+		res.status(400).send({ status: "error", message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		const books = await removeBookFromUser(userId, bookId);
+		res.send({ status: "success", data: books });
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
 }

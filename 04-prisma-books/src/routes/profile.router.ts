@@ -1,5 +1,7 @@
 import express from "express";
 import { addBooks, getBooks, getProfile, removeBook, updateProfile } from "../controllers/profile.controller.ts";
+import { validateRequest } from "../middlewares/validateRequest.ts";
+import { updateUserRules } from "../rules/user.rules.ts";
 
 // Create a Profile router
 export const profileRouter = express.Router();
@@ -16,7 +18,7 @@ profileRouter.get("/", getProfile);
  *
  * Update the authenticated user's profile
  */
-profileRouter.patch("/", updateProfile);
+profileRouter.patch("/", updateUserRules, validateRequest, updateProfile);
 
 /**
  * GET /profile/books

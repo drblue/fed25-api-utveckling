@@ -1,9 +1,15 @@
 /**
  * Profile Controller
  */
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
-import { addBooksToUser, getUserBooks, removeBookFromUser } from "../services/user.service.ts";
+import { addBooksToUser, getUserBooks, removeBookFromUser, updateUser } from "../services/user.service.ts";
+import { matchedData } from "express-validator";
+import { UpdateUserData } from "../types/User.types.ts";
+
+// Get salt rounds from environment
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
 /**
  * Get the authenticated user's profile
@@ -45,8 +51,30 @@ export const getBooks = async (req: Request, res: Response) => {
 /**
  * Update the authenticated user's profile
  */
-export const updateProfile = async (_req: Request, res: Response) => {
-	res.status(501).send({ status: "success", data: null });
+export const updateProfile = async (req: Request, res: Response) => {
+	// If someone ever removes the authentication middleware from the route for this method, yell at them 😱
+	if (!req.user) {
+		throw new Error("Trying to access authenticated user but none exists. Did you remove authentication from this route? 🤬🤬🤬");
+	}
+
+	const userId = req.user.id;
+
+	// Get only the validated data
+	const validatedData = matchedData<UpdateUserData>(req);
+	const data = { ...validatedData };  // clone of validateData so we don't overwrite any incoming data
+
+	if (data.password) {
+		// Calculate a hash + salt for the password
+		data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
+	}
+
+	try {
+		const user = await updateUser(userId, data);
+		res.send({ status: "success", data: user });
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
 }
 
 /**

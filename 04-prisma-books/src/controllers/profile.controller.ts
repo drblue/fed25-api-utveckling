@@ -2,6 +2,8 @@
  * Profile Controller
  */
 import { Request, Response } from "express";
+import { handlePrismaError } from "../lib/handlePrismaError.ts";
+import { getBooksByUserId } from "../services/book.service.ts";
 
 /**
  * Get the authenticated user's profile
@@ -23,7 +25,22 @@ export const getProfile = async (req: Request, res: Response) => {
 /**
  * Get the authenticated user's books
  */
-export const getBooks = async (_req: Request, res: Response) => {
+export const getBooks = async (req: Request, res: Response) => {
+	// If someone ever removes the authentication middleware from the route for this method, yell at them 😱
+	if (!req.user) {
+		throw new Error("Trying to access authenticated user but none exists. Did you remove authentication from this route? 🤬🤬🤬");
+	}
+
+	const userId = req.user.id;
+
+	try {
+		const books = await getBooksByUserId(userId);
+		res.send({ status: "success", data: books });
+
+	} catch (err) {
+		handlePrismaError(res, err);
+	}
+
 	res.send({ status: "success", data: null });
 }
 

@@ -13,6 +13,23 @@ export const getBooks = () => {
 }
 
 /**
+ * Get all books that are connected to the specified user
+ *
+ * @param userId User ID
+ */
+export const getBooksByUserId = (userId: number) => {
+	return prisma.book.findMany({
+		where: {
+			users: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+	});
+}
+
+/**
  * Get a single book
  *
  * @param bookId The ID of the Book to get

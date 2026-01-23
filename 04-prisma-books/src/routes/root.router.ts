@@ -1,5 +1,5 @@
 import express from "express";
-import { basic } from "../middlewares/auth/basic.ts";
+import { verifyAccessToken } from "../middlewares/auth/jwt.ts";
 import { authRouter } from "./auth.router.ts";
 import { authorsRouter } from "./authors.router.ts";
 import { booksRouter } from "./books.router.ts";
@@ -29,4 +29,4 @@ rootRouter.use("/publishers", publishersRouter);
 rootRouter.use(authRouter);
 
 // Profile router
-rootRouter.use("/profile", basic, profileRouter);
+rootRouter.use("/profile", verifyAccessToken, profileRouter);

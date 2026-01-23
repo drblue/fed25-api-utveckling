@@ -6,6 +6,17 @@ import { BookId } from "../types/Book.types.ts";
 import { CreateUserData, UpdateUserData } from "../types/User.types.ts";
 
 /**
+ * Get a User
+ *
+ * @param id ID of user to get
+ */
+export const getUser = async (id: number) => {
+	return await prisma.user.findUnique({
+		where: { id },
+	});
+}
+
+/**
  * Get a User by email
  *
  * @param email Email of user to get

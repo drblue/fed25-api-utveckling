@@ -1,10 +1,17 @@
 import express from "express";
-import { register } from "../controllers/auth.controller.ts";
+import { login, register } from "../controllers/auth.controller.ts";
 import { createUserRules } from "../rules/user.rules.ts";
 import { validateRequest } from "../middlewares/validateRequest.ts";
 
 // Create a Resource router
 export const authRouter = express.Router();
+
+/**
+ * POST /login
+ *
+ * Log in a user
+ */
+authRouter.post("/login", login);
 
 /**
  * POST /register

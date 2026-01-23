@@ -8,8 +8,35 @@ import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { CreateUserData } from "../types/User.types.ts";
 import { createUser } from "../services/user.service.ts";
 
-// Get salt rounds from environment
+// Get environment variables
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
+
+// Guard against incorrect config
+if (!ACCESS_TOKEN_SECRET) {
+	throw new Error("No ACCESS_TOKEN_SECRET defined in environment");
+}
+
+/**
+ * Log in a user
+ */
+export const login = async (req: Request, res: Response) => {
+	// Get email and password from request-body
+
+	// Get user from database, otherwise bail 🛑
+
+	// Verify hash against credentials, otherwise bail 🛑
+
+	// Construct JWT-payload
+
+	// Sign payload with (access-token)-secret
+
+	// Respond with access-token
+	res.send({
+		status: "success",
+		data: null,
+	});
+}
 
 /**
  * Register a User

@@ -2,11 +2,17 @@
  * Auth Controller
  */
 import bcrypt from "bcrypt";
+import Debug from "debug";
 import { Request, Response } from "express";
 import { matchedData } from "express-validator";
+import jwt from "jsonwebtoken";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { CreateUserData } from "../types/User.types.ts";
-import { createUser } from "../services/user.service.ts";
+import { createUser, getUserByEmail } from "../services/user.service.ts";
+import { JWTAccessTokenPayload } from "../types/JWT.types.ts";
+
+// Create a new debug instance
+const debug = Debug("prisma-books:auth_controller");
 
 // Get environment variables
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
@@ -17,24 +23,58 @@ if (!ACCESS_TOKEN_SECRET) {
 	throw new Error("No ACCESS_TOKEN_SECRET defined in environment");
 }
 
+interface LoginRequestBody {
+	email?: string;
+	password?: string;
+}
+
 /**
  * Log in a user
  */
 export const login = async (req: Request, res: Response) => {
 	// Get email and password from request-body
+	const { email, password }: LoginRequestBody = req.body;
+
+	// Check that user sent email and password
+	if (!email || !password) {
+		debug("User did not send email and/or password");
+		res.status(400).send({ status: "fail", data: { message: "Request body invalid" }});
+		return;
+	}
 
 	// Get user from database, otherwise bail 🛑
+	const user = await getUserByEmail(email);
+	if (!user) {
+		debug("User %s does not exist", email);
+		res.status(401).send({ status: "fail", data: { message: "Authorization invalid" }});
+		return;
+	}
 
 	// Verify hash against credentials, otherwise bail 🛑
+	const isPasswordCorrect = await bcrypt.compare(password, user.password);
+	if (!isPasswordCorrect) {
+		debug("Password for user %s was not correct", email);
+		res.status(401).send({ status: "fail", data: { message: "Authorization invalid" }});
+		return;
+	}
+	debug("✅ Password for user %s was correct 🥳", email);
 
 	// Construct JWT-payload
+	const payload: JWTAccessTokenPayload = {
+		sub: String(user.id),
+		name: user.name,
+		email: user.email,
+	}
 
 	// Sign payload with (access-token)-secret
+	const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET);
 
 	// Respond with access-token
 	res.send({
 		status: "success",
-		data: null,
+		data: {
+			access_token,
+		},
 	});
 }
 

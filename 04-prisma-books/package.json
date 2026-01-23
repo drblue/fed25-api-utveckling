@@ -6,7 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "debug": "cross-env DEBUG=prisma-books:* tsx --watch src/server.ts",
-    "dev": "tsx --watch src/server.ts",
+    "dev": "cross-env DEBUG=prisma-books:* tsx --watch src/server.ts",
     "start": "tsx src/server.ts"
   },
   "keywords": [],

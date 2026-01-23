@@ -3,9 +3,19 @@
  */
 import Debug from "debug";
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { JWTAccessTokenPayload } from "../../types/JWT.types.ts";
 
 // Create a new debug instance
 const debug = Debug("prisma-books:auth:jwt");
+
+// Get environment variables
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+
+// Guard against incorrect config
+if (!ACCESS_TOKEN_SECRET) {
+	throw new Error("No ACCESS_TOKEN_SECRET defined in environment");
+}
 
 export const verifyAccessToken = async (req: Request, res: Response, next: NextFunction) => {
 	debug("Hello from auth/jwt! 🙋😎");
@@ -30,9 +40,18 @@ export const verifyAccessToken = async (req: Request, res: Response, next: NextF
 	}
 
 	// 4. Verify token and extract payload, otherwise bail 🛑
+	try {
+		const payload = jwt.verify(token, ACCESS_TOKEN_SECRET) as JWTAccessTokenPayload;
 
-	// 5. Attach payload to request
+		// 5. Attach payload to request
+		req.token = payload;
 
-	// 6. Profit 💰🤑
-	next();
+		// 6. Profit 💰🤑
+		next();
+
+	} catch (err) {
+		debug("JWT Verify failed: %O", err);
+		res.status(401).send({ status: "fail", data: { message: "Authorization denied" } });
+		return;
+	}
 }

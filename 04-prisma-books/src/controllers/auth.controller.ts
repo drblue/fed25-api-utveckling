@@ -99,6 +99,51 @@ export const login = async (req: Request, res: Response) => {
 }
 
 /**
+ * Issue a new access_token using a refresh_token
+ */
+export const refresh = async (req: Request, res: Response) => {
+	// 1. Get refresh token from cookie 🍪
+	debug("🍪 Cookies: %o", req.cookies);
+	const refresh_token = (req.cookies as { refresh_token?: string }).refresh_token;
+	if (!refresh_token) {
+		debug("No refresh token found in cookies 😢");
+		res.status(401).send({ status: "fail", data: { message: "Authorization required" }});
+		return;
+	}
+
+	// 2. Verify refresh token and extract payload with id (`sub`) ✨
+	let refresh_payload: JWTRefreshTokenPayload;
+	try {
+		// Verify token using the refresh-token secret
+		refresh_payload = jwt.verify(refresh_token, REFRESH_TOKEN_SECRET) as JWTRefreshTokenPayload;
+
+	} catch (err) {
+		debug("JWT Refresh Verify failed: %O", err);
+
+		// If token has expired, let the user know
+		if (err instanceof jwt.TokenExpiredError) {
+			res.status(401).send({ status: "fail", data: { message: "Refresh token has expired" } });
+			return;
+		}
+
+		res.status(401).send({ status: "fail", data: { message: "Authorization denied" } });
+		return;
+	}
+
+	// 3. Find user with id from refresh token 🕵
+
+	// 4. Construct new access token payload 🏗️
+
+	// 5. Sign payload with access token secret ✍🏻
+
+	// 6. Respond with the new access token 🗣️
+	res.send({
+		status: "success",
+		data: null,
+	});
+}
+
+/**
  * Register a User
  */
 export const register = async (req: Request, res: Response) => {

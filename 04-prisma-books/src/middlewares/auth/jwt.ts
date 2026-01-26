@@ -51,6 +51,13 @@ export const verifyAccessToken = async (req: Request, res: Response, next: NextF
 
 	} catch (err) {
 		debug("JWT Verify failed: %O", err);
+
+		// If token has expired, let the user know
+		if (err instanceof jwt.TokenExpiredError) {
+			res.status(401).send({ status: "fail", data: { message: "Authorization token has expired" } });
+			return;
+		}
+
 		res.status(401).send({ status: "fail", data: { message: "Authorization denied" } });
 		return;
 	}

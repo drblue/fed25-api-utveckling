@@ -6,6 +6,7 @@ import Debug from "debug";
 import { Request, Response } from "express";
 import { matchedData } from "express-validator";
 import jwt from "jsonwebtoken";
+import { StringValue } from "ms";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { CreateUserData } from "../types/User.types.ts";
 import { createUser, getUserByEmail } from "../services/user.service.ts";
@@ -15,6 +16,7 @@ import { JWTAccessTokenPayload } from "../types/JWT.types.ts";
 const debug = Debug("prisma-books:auth_controller");
 
 // Get environment variables
+const ACCESS_TOKEN_LIFETIME = process.env.ACCESS_TOKEN_LIFETIME as StringValue || "4h";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
@@ -60,7 +62,10 @@ export const login = async (req: Request, res: Response) => {
 	}
 
 	// Sign payload with (access-token)-secret
-	const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET);
+	const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+		// expiresIn: 60 * 60 * 24 * 3,  // 3d
+		expiresIn: ACCESS_TOKEN_LIFETIME,
+	});
 
 	// Respond with access-token
 	res.send({

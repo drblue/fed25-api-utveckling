@@ -23,24 +23,17 @@ if (!ACCESS_TOKEN_SECRET) {
 	throw new Error("No ACCESS_TOKEN_SECRET defined in environment");
 }
 
-interface LoginRequestBody {
-	email?: string;
-	password?: string;
+interface LoginData {
+	email: string;
+	password: string;
 }
 
 /**
  * Log in a user
  */
 export const login = async (req: Request, res: Response) => {
-	// Get email and password from request-body
-	const { email, password }: LoginRequestBody = req.body;
-
-	// Check that user sent email and password
-	if (!email || !password) {
-		debug("User did not send email and/or password");
-		res.status(400).send({ status: "fail", data: { message: "Request body invalid" }});
-		return;
-	}
+	// Get the validated data
+	const { email, password } = matchedData<LoginData>(req);
 
 	// Get user from database, otherwise bail 🛑
 	const user = await getUserByEmail(email);

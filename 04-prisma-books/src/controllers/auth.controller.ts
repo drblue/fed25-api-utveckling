@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { CreateUserData } from "../types/User.types.ts";
-import { createUser, getUserByEmail } from "../services/user.service.ts";
+import { createUser, getUser, getUserByEmail } from "../services/user.service.ts";
 import { JWTAccessTokenPayload, JWTRefreshTokenPayload } from "../types/JWT.types.ts";
 
 // Create a new debug instance
@@ -131,15 +131,33 @@ export const refresh = async (req: Request, res: Response) => {
 	}
 
 	// 3. Find user with id from refresh token 🕵
+	debug("Decoded refresh token payload: %O", refresh_payload);
+	const userId = Number(refresh_payload.sub);
+	const user = await getUser(userId);
+	if (!user) {
+		debug("User with id %d does not exist (anymore at least)", userId);
+		res.status(401).send({ status: "fail", data: { message: "Authorization denied" } });
+		return;
+	}
 
 	// 4. Construct new access token payload 🏗️
+	const access_payload: JWTAccessTokenPayload = {
+		sub: String(user.id),
+		name: user.name,
+		email: user.email,
+	}
 
 	// 5. Sign payload with access token secret ✍🏻
+	const access_token = jwt.sign(access_payload, ACCESS_TOKEN_SECRET, {
+		expiresIn: ACCESS_TOKEN_LIFETIME,
+	});
 
 	// 6. Respond with the new access token 🗣️
 	res.send({
 		status: "success",
-		data: null,
+		data: {
+			access_token,
+		},
 	});
 }
 

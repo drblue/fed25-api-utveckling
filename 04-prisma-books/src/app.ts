@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import _ from "lodash";
 import morgan from "morgan";
+import { notFound } from "./middlewares/notFound.ts";
 import { rootRouter } from "./routes/root.router.ts";
 
 const app = express();
@@ -17,8 +18,6 @@ app.use(rootRouter);
 /**
  * Catch-all route 🛟
  */
-app.use((req, res) => {
-	res.status(404).send({ status: "error", message: `Cannot ${req.method} ${req.path}` });
-});
+app.use(notFound);
 
 export default app;

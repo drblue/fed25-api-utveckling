@@ -10,7 +10,7 @@ import { StringValue } from "ms";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { CreateUserData } from "../types/User.types.ts";
 import { createUser, getUserByEmail } from "../services/user.service.ts";
-import { JWTAccessTokenPayload } from "../types/JWT.types.ts";
+import { JWTAccessTokenPayload, JWTRefreshTokenPayload } from "../types/JWT.types.ts";
 
 // Create a new debug instance
 const debug = Debug("prisma-books:auth_controller");
@@ -18,11 +18,16 @@ const debug = Debug("prisma-books:auth_controller");
 // Get environment variables
 const ACCESS_TOKEN_LIFETIME = process.env.ACCESS_TOKEN_LIFETIME as StringValue || "4h";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_LIFETIME = process.env.REFRESH_TOKEN_LIFETIME as StringValue || "1d";
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
 // Guard against incorrect config
 if (!ACCESS_TOKEN_SECRET) {
 	throw new Error("No ACCESS_TOKEN_SECRET defined in environment");
+}
+if (!REFRESH_TOKEN_SECRET) {
+	throw new Error("No REFRESH_TOKEN_SECRET defined in environment");
 }
 
 interface LoginData {
@@ -54,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
 	}
 	debug("✅ Password for user %s was correct 🥳", email);
 
-	// Construct JWT-payload
+	// Construct JWT access-token payload
 	const payload: JWTAccessTokenPayload = {
 		sub: String(user.id),
 		name: user.name,
@@ -65,6 +70,23 @@ export const login = async (req: Request, res: Response) => {
 	const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
 		// expiresIn: 60 * 60 * 24 * 3,  // 3d
 		expiresIn: ACCESS_TOKEN_LIFETIME,
+	});
+
+	// Construct JWT refresh-tokenb payload
+	const refresh_payload: JWTRefreshTokenPayload = {
+		sub: String(user.id),
+	}
+
+	// Sign refresh-payload with (refresh-token)-secret
+	const refresh_token = jwt.sign(refresh_payload, REFRESH_TOKEN_SECRET, {
+		expiresIn: REFRESH_TOKEN_LIFETIME,
+	});
+
+	// Set refresh_token as a http-only cookie
+	res.cookie("refresh_token", refresh_token, {
+		httpOnly: true,
+		sameSite: "strict",
+		path: "/refresh",
 	});
 
 	// Respond with access-token

@@ -7,3 +7,7 @@ export interface JWTAccessTokenPayload {
 	name: string;
 	email: string;
 }
+
+export interface JWTRefreshTokenPayload {
+	sub: string;
+}

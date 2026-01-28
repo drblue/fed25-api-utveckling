@@ -51,3 +51,19 @@ export const show = async (req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Error thrown when finding movie" });
 	}
 }
+
+/**
+ * Create a movie
+ */
+export const store = async (req: Request, res: Response) => {
+	try {
+		// Create and save a Movie
+		const movie = await Movie.create(req.body);
+
+		res.send({ status: "success", data: movie });
+
+	} catch (err) {
+		debug("Error thrown when creating movie %o: %O", req.body, err);
+		res.status(500).send({ status: "error", message: "Error thrown when creating movie" });
+	}
+}

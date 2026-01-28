@@ -1,5 +1,5 @@
 import express from "express";
-import { index, show } from "./movie.controller.ts";
+import { index, show, store } from "./movie.controller.ts";
 
 // Create a Movie router
 export const movieRouter = express.Router();
@@ -13,3 +13,8 @@ movieRouter.get("/", index);
  * GET /movie/:movieId
  */
 movieRouter.get("/:movieId", show);
+
+/**
+ * POST /movies
+ */
+movieRouter.post("/", store);

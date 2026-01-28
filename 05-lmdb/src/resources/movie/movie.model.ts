@@ -8,14 +8,14 @@ export interface MovieDocument extends Document {
 
 const movieSchema = new Schema<MovieDocument>({
 	title: {
-		type: Schema.Types.String,
+		type: String,
 		required: true,
 	},
 	runtime: {
-		type: Schema.Types.Int32,
+		type: Number,
 	},
 	release_year: {
-		type: Schema.Types.Int32,
+		type: Number,
 	},
 });
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Debug from "debug";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Error } from "mongoose";
 import { Movie } from "./movie.model.ts";
 const debug = Debug("lmdb:movie.controller");
 
@@ -63,6 +63,12 @@ export const store = async (req: Request, res: Response) => {
 		res.send({ status: "success", data: movie });
 
 	} catch (err) {
+		if (err instanceof Error.ValidationError) {
+			debug("Validation failed when creating movie %o: %O", req.body, err);
+			res.status(400).send({ status: "fail", data: err.errors });
+			return;
+		}
+
 		debug("Error thrown when creating movie %o: %O", req.body, err);
 		res.status(500).send({ status: "error", message: "Error thrown when creating movie" });
 	}

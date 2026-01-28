@@ -5,6 +5,7 @@ export interface MovieDocument extends Document {
 	runtime: number | null;  // `?` can be removed when we default the schema-field to null
 	release_year: number | null;
 	genres: string[];
+	watched: Date;
 }
 
 const currentYear = new Date().getFullYear();
@@ -39,7 +40,17 @@ const movieSchema = new Schema<MovieDocument>({
 		set(genres: string[]) {
 			return genres.map(genre => genre.toLowerCase());
 		},
-	}
+	},
+	watched: {
+		type: Date,
+		default() {
+			return Date.now();  // current time in milliseconds
+		},
+		set(timestamp: number) {
+			// convert timestamp (seconds) to milliseconds before saving it to the db
+			return timestamp * 1000;
+		},
+	},
 });
 
 export const Movie = model("Movie", movieSchema);

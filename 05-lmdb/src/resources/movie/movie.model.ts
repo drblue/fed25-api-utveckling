@@ -6,6 +6,8 @@ export interface MovieDocument extends Document {
 	release_year?: number;
 }
 
+const currentYear = new Date().getFullYear();
+
 const movieSchema = new Schema<MovieDocument>({
 	title: {
 		type: String,
@@ -13,9 +15,12 @@ const movieSchema = new Schema<MovieDocument>({
 	},
 	runtime: {
 		type: Number,
+		min: [1, "has to be a positive number"],
 	},
 	release_year: {
 		type: Number,
+		min: [1888, "has to be 1888 or later"],
+		max: [currentYear, "cannot be in the future"],
 	},
 });
 

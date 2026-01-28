@@ -4,6 +4,7 @@ export interface MovieDocument extends Document {
 	title: string;
 	runtime: number | null;  // `?` can be removed when we default the schema-field to null
 	release_year: number | null;
+	genres: string[];
 }
 
 const currentYear = new Date().getFullYear();
@@ -31,6 +32,14 @@ const movieSchema = new Schema<MovieDocument>({
 		min: [1888, "has to be 1888 or later"],
 		max: [currentYear, "cannot be in the future"],
 	},
+	genres: {
+		type: [String],
+		default: [],
+		// lowercase: true,  // won't work as the value is an array of strings and not a string
+		set(genres: string[]) {
+			return genres.map(genre => genre.toLowerCase());
+		},
+	}
 });
 
 export const Movie = model("Movie", movieSchema);

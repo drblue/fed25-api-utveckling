@@ -20,3 +20,27 @@ export const index = async (_req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Error thrown when finding movies" });
 	}
 }
+
+/**
+ * Get a single movie
+ */
+export const show = async (req: Request, res: Response) => {
+	const movieId = req.params.movieId;
+
+	try {
+		// Find a single movie (by id)
+		const movie = await Movie.findById(movieId);
+
+		// If no movie was found, respond with 404
+		if (!movie) {
+			res.status(404).send({ status: "fail", data: { message: "Movie Not Found" } });
+			return;
+		}
+
+		res.send({ status: "success", data: movie });
+
+	} catch (err) {
+		debug("Error thrown when finding movie %s: %O", movieId, err);
+		res.status(500).send({ status: "error", message: "Error thrown when finding movie" });
+	}
+}

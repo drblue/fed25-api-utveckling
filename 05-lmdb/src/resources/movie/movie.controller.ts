@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Debug from "debug";
+import { isValidObjectId } from "mongoose";
 import { Movie } from "./movie.model.ts";
 const debug = Debug("lmdb:movie.controller");
 
@@ -26,6 +27,12 @@ export const index = async (_req: Request, res: Response) => {
  */
 export const show = async (req: Request, res: Response) => {
 	const movieId = req.params.movieId;
+
+	// Check if provided ID is a valid ObjectId (does not guarantee that the document exists)
+	if (!isValidObjectId(movieId)) {
+		res.status(400).send({ status: "error", message: "Invalid Id" });
+		return;
+	}
 
 	try {
 		// Find a single movie (by id)

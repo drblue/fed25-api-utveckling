@@ -18,7 +18,12 @@ const movieSchema = new Schema<MovieDocument>({
 	runtime: {
 		type: Number,
 		default: null,
-		min: [1, "has to be a positive number"],
+		// min: [1, "has to be a positive number"],
+		validate(value: number | null) {
+			if (value !== null && value < 1) {
+				throw new Error("Just because you thought the movie was bad, it shouldn't have zero or negative runtime");
+			}
+		},
 	},
 	release_year: {
 		type: Number,

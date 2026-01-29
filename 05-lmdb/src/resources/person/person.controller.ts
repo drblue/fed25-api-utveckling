@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Debug from "debug";
 import { isValidObjectId, Error } from "mongoose";
 import { Person } from "./person.model.ts";
+import { Movie } from "../movie/movie.model.ts";
 const debug = Debug("lmdb:person.controller");
 
 /**
@@ -38,13 +39,27 @@ export const show = async (req: Request, res: Response) => {
 		// Find a single person (by id)
 		const person = await Person.findById(personId);
 
+		// Get movies where person is a director
+		const directing = await Movie
+			.find({ director: personId })
+			.select(["title", "release_year"]);
+
+		// Get movies where person is an actor
+		const acting = await Movie
+			.find({ actors: personId })
+			.select(["title", "release_year"]);
+
 		// If no person was found, respond with 404
 		if (!person) {
 			res.status(404).send({ status: "fail", data: { message: "Person Not Found" } });
 			return;
 		}
 
-		res.send({ status: "success", data: person });
+		res.send({ status: "success", data: {
+			person,
+			directing,
+			acting,
+		}});
 
 	} catch (err) {
 		debug("Error thrown when finding person %s: %O", personId, err);

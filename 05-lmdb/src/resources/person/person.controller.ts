@@ -128,3 +128,44 @@ export const update = async (req: Request, res: Response) => {
 	}
 }
 
+/**
+ * Delete a single person
+ */
+export const destroy = async (req: Request, res: Response) => {
+	const personId = req.params.personId;
+
+	// Check if provided ID is a valid ObjectId (does not guarantee that the document exists)
+	if (!isValidObjectId(personId)) {
+		res.status(400).send({ status: "error", message: "Invalid Id" });
+		return;
+	}
+
+	try {
+		// Remove the person from any movies they've directed
+		await Movie.updateMany(
+			{ director: personId },  // which document should we update?
+			{ director: null },  // what should we update the document with?
+		);
+
+		// Remove the person from any movies they've acted in
+		await Movie.updateMany(
+			{ actors: personId },  // which document should we update?
+			{ $pull: { actors: personId } },  // what should we update the document with?
+		);
+
+		// Delete person
+		const person = await Person.findByIdAndDelete(personId);
+
+		// If no person was found, respond with 404
+		if (!person) {
+			res.status(404).send({ status: "fail", data: { message: "Person Not Found" } });
+			return;
+		}
+
+		res.status(204).send();
+
+	} catch (err) {
+		debug("Error thrown when deleting person %s: %O", personId, err);
+		res.status(500).send({ status: "error", message: "Error thrown when deleting person" });
+	}
+}

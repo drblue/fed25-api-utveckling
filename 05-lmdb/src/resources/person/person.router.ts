@@ -1,5 +1,5 @@
 import express from "express";
-import { index, show, store } from "./person.controller.ts";
+import { destroy, index, show, store, update } from "./person.controller.ts";
 
 // Create a Person router
 export const personRouter = express.Router();
@@ -24,3 +24,7 @@ personRouter.post("/", store);
  */
 personRouter.patch("/:personId", update);
 
+/**
+ * DELETE /people/:personId
+ */
+personRouter.delete("/:personId", destroy);

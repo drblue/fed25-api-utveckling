@@ -7,7 +7,8 @@ export interface MovieDocument extends Document {
 	release_year: number | null;
 	genres: string[];
 	watched: Date;
-	director: PersonDocument["_id"];
+	director: PersonDocument["_id"] | null;
+	actors: PersonDocument["_id"][];
 }
 
 const currentYear = new Date().getFullYear();
@@ -54,6 +55,12 @@ const movieSchema = new Schema<MovieDocument>({
 	director: {
 		type: Schema.Types.ObjectId,
 		ref: "Person",
+		default: null,
+	},
+	actors: {
+		type: [Schema.Types.ObjectId],
+		ref: "Person",
+		default: [],
 	},
 });
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { index, show, store, update } from "./movie.controller.ts";
+import { destroy, index, show, store, update } from "./movie.controller.ts";
 
 // Create a Movie router
 export const movieRouter = express.Router();
@@ -23,3 +23,8 @@ movieRouter.post("/", store);
  * PATCH /movie/:movieId
  */
 movieRouter.patch("/:movieId", update);
+
+/**
+ * DELETE /movie/:movieId
+ */
+movieRouter.delete("/:movieId", destroy);

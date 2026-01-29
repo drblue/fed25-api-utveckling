@@ -45,9 +45,7 @@ const movieSchema = new Schema<MovieDocument>({
 	},
 	watched: {
 		type: Date,
-		default() {
-			return Date.now();  // current time in milliseconds
-		},
+		default: null,
 		set(timestamp: number) {
 			// convert timestamp (seconds) to milliseconds before saving it to the db
 			return timestamp * 1000;

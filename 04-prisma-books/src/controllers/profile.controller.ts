@@ -7,6 +7,7 @@ import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { addBooksToUser, getUser, getUserBooks, removeBookFromUser, updateUser } from "../services/user.service.ts";
 import { matchedData } from "express-validator";
 import { UpdateUserData } from "../types/User.types.ts";
+import { BookId } from "../types/Book.types.ts";
 
 // Get salt rounds from environment
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
@@ -91,7 +92,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 /**
  * Add books to the authenticated user
  */
-export const addBooks = async (req: Request, res: Response) => {
+export const addBooks = async (req: Request<unknown, unknown, BookId | BookId[]>, res: Response) => {
 	// If someone ever removes the authentication middleware from the route for this method, yell at them 😱
 	if (!req.token) {
 		throw new Error("Trying to access authenticated user but none exists. Did you remove authentication from this route? 🤬🤬🤬");

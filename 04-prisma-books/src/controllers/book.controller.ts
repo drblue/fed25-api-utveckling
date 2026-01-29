@@ -6,6 +6,7 @@ import { matchedData } from "express-validator";
 import { handlePrismaError } from "../lib/handlePrismaError.ts";
 import { addAuthorToBook, createBook, deleteBook, getBook, getBooks, removeAuthorFromBook, updateBook } from "../services/book.service.ts";
 import { CreateBookData, UpdateBookData } from "../types/Book.types.ts";
+import { AuthorId } from "../types/Author.types.ts";
 
 /**
  * Get all books
@@ -99,7 +100,7 @@ export const destroy = async (req: Request, res: Response) => {
 /**
  * Add author(s) to book
  */
-export const addAuthor = async (req: Request, res: Response) => {
+export const addAuthor = async (req: Request<{ bookId: string }, unknown, AuthorId | AuthorId[]>, res: Response) => {
 	const bookId = Number(req.params.bookId);
 	if (!bookId) {
 		res.status(400).send({ message: "Invalid Id" });

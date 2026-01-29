@@ -11,7 +11,7 @@
     "dev": "cross-env DEBUG=prisma-books:* tsx --watch src/server.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "type-coverage": "type-coverage -p tsconfig.json --at-least 99 --detail --ignore-files \"generated/prisma/internal/*.ts\" --ignore-files \"prisma/seed.ts\"",
+    "type-coverage": "type-coverage -p tsconfig.json --at-least 99 --detail --ignore-files \"generated/**/*.ts\" --ignore-files \"prisma/seed.ts\"",
     "start": "tsx src/server.ts"
   },
   "keywords": [],

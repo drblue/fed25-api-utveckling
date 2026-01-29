@@ -25,6 +25,7 @@ export const connect = async () => {
 	}
 
 	// Connect to database server
+	debug("☎️ Connecting to MongoDB Atlas, please stand by...");
 	const connection = await mongoose.connect(DATABASE_URL);
 
 	// Assign connection to global variable

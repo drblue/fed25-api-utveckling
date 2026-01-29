@@ -2,6 +2,7 @@ import "./config/loadEnv.ts";
 import http from "http";
 import app from "./app.ts";
 import { connect } from "./lib/db.ts";
+import mongoose from "mongoose";
 
 // Read port to start server on from `.env`, otherwise default to port 3000
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,10 @@ connect()
 		server.listen(PORT);
 	})
 	.catch((err) => {
+		if (err instanceof mongoose.Error.MongooseServerSelectionError) {
+			console.error("MongooseServerSelectionError - This is most likely because you're trying to access the database server from a new IP address that isn't whitelisted. Please check and try again.");
+			process.exit(1);
+		}
 		console.error(err);
 		process.exit(1);
 	});

@@ -1,4 +1,5 @@
 import { Document, model, Schema } from "mongoose";
+import { PersonDocument } from "../person/person.model.ts";
 
 export interface MovieDocument extends Document {
 	title: string;
@@ -6,6 +7,7 @@ export interface MovieDocument extends Document {
 	release_year: number | null;
 	genres: string[];
 	watched: Date;
+	director: PersonDocument["_id"];
 }
 
 const currentYear = new Date().getFullYear();
@@ -50,6 +52,10 @@ const movieSchema = new Schema<MovieDocument>({
 			// convert timestamp (seconds) to milliseconds before saving it to the db
 			return timestamp * 1000;
 		},
+	},
+	director: {
+		type: Schema.Types.ObjectId,
+		ref: "Person",
 	},
 });
 

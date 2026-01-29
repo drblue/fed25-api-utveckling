@@ -18,3 +18,9 @@ personRouter.get("/:personId", show);
  * POST /people
  */
 personRouter.post("/", store);
+
+/**
+ * PATCH /people/:personId
+ */
+personRouter.patch("/:personId", update);
+

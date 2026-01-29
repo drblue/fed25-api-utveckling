@@ -36,7 +36,7 @@ export const show = async (req: Request, res: Response) => {
 
 	try {
 		// Find a single movie (by id)
-		const movie = await Movie.findById(movieId);
+		const movie = await Movie.findById(movieId).populate("director", "name");
 
 		// If no movie was found, respond with 404
 		if (!movie) {

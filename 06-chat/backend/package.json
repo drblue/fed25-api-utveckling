@@ -5,8 +5,8 @@
   "scripts": {
     "build": "npx prisma generate && node scripts/build.js",
     "check": "run-s lint typecheck type-coverage",
-    "debug": "cross-env DEBUG=prisma-books:* tsx --watch src/server.ts",
-    "dev": "cross-env DEBUG=prisma-books:* tsx --watch src/server.ts",
+    "debug": "cross-env DEBUG=chat:* tsx --watch src/server.ts",
+    "dev": "cross-env DEBUG=chat:* tsx --watch src/server.ts",
     "lint": "eslint .",
     "pre-deploy": "npx prisma migrate deploy && npx prisma db seed",
     "typecheck": "tsc --noEmit",

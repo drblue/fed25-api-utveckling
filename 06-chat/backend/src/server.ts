@@ -1,24 +1,43 @@
 import "./config/loadEnv.ts";
 import app from "./app.ts";
+import Debug from "debug";
 import http from "http";
+import { Server } from "socket.io";
 
 // Read port to start server on from `.env`, otherwise default to port 3000
 const PORT = process.env.PORT || 3000;
 
+// Create a new debug instance
+const debug = Debug("chat:server");
+
 /**
- * Create HTTP server.
+ * Create HTTP and Socket.IO server.
  */
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+	cors: {
+		credentials: true,
+		origin: "*",
+	},
+});
+
+/**
+ * Handle incoming Socket.IO connection
+ */
+io.on("connection", (socket) => {
+	// Yay someone connected to me
+	debug("Yay %s connected!!!! 🎉", socket.id);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(PORT);
+httpServer.listen(PORT);
 
 /**
  * Event listener for HTTP server "error" event.
  */
-server.on("error", (err: NodeJS.ErrnoException) => {
+httpServer.on("error", (err: NodeJS.ErrnoException) => {
 	if (err.syscall !== "listen") {
 		throw err;
 	}
@@ -40,6 +59,6 @@ server.on("error", (err: NodeJS.ErrnoException) => {
 /**
  * Event listener for HTTP server "listening" event.
  */
-server.on("listening", () => {
+httpServer.on("listening", () => {
 	console.log(`🌎 Yay, server started on http://localhost:${PORT}`);
 });

@@ -15,3 +15,8 @@ const socket = io(SOCKET_HOST);
 socket.on("connect", () => {
 	console.log("💥 Connected to the server", socket.id);
 });
+
+// Listen for when the server gets tired of us
+socket.on("disconnect", () => {
+	console.log("🥺 Got disconnected from the server");
+});

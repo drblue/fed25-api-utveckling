@@ -27,6 +27,11 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
 	// Yay someone connected to me
 	debug("Yay %s connected!!!! 🎉", socket.id);
+
+	// Handle user disconnecting
+	socket.on("disconnect", () => {
+		debug("👋 User %s disconnected", socket.id);
+	});
 });
 
 /**

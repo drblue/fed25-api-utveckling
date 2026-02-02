@@ -1,13 +1,13 @@
-import type { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
+import type { ChatMessagePayload, ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import { io, Socket } from "socket.io-client";
 import "./assets/scss/style.scss";
 
 const SOCKET_HOST = import.meta.env.VITE_SOCKET_HOST;
 console.log("SOCKET_HOST:", SOCKET_HOST);
 
-// const messageEl = document.querySelector("#message") as HTMLInputElement;
-// const messageFormEl = document.querySelector("#message-form") as HTMLFormElement;
-// const messagesEl = document.querySelector("#messages") as HTMLDivElement;
+const messageInputEl = document.querySelector<HTMLInputElement>("#message")!;
+const messageFormEl = document.querySelector<HTMLFormElement>("#message-form")!;
+// const messagesEl = document.querySelector<HTMLDivElement>("#messages")!;
 
 // Connect to Socket.IO Server
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_HOST);
@@ -22,7 +22,35 @@ socket.on("disconnect", () => {
 	console.log("🥺 Got disconnected from the server");
 });
 
-// Listen for when the nice server says hello
-socket.on("hello", () => {
-	console.log(" Server said: Hello, is it me you're looking for? ☺️");
+// Listen for new chat messages (that the server emitts to us)
+socket.on("chatMessage", (payload) => {
+	console.log("📨 YAY SOMEONE WROTE SOMETHING!!!!!!1111", payload);
+});
+
+/**
+ * Send message to server when form is submitted
+ */
+messageFormEl.addEventListener("submit", (e) => {
+	e.preventDefault();
+
+	// 💇
+	const trimmedMessage = messageInputEl.value.trim();
+
+	// If no message, no send
+	if (!trimmedMessage) {
+		return;
+	}
+
+	// Construct message payload
+	const payload: ChatMessagePayload = {
+		content: trimmedMessage,
+	}
+
+	// 📮 Send (emit) the message to the server
+	socket.emit("sendChatMessage", payload);
+	console.log("Emitted 'sendChatMessage' event to the server", payload);
+
+	// Clear input field
+	messageInputEl.value = "";
+	messageInputEl.focus();
 });

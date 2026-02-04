@@ -12,12 +12,17 @@ const messagesEl = document.querySelector<HTMLDivElement>("#messages")!;
 /**
  * Functions
  */
-const addMessageToChat = (data: ChatMessagePayload) => {
+const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	// Create a new LI element
 	const msgEl = document.createElement("li");
 
 	// Set CSS-classes
 	msgEl.classList.add("message");
+
+	// If it's our own message, add the `own-message` class
+	if (ownMessage) {
+		msgEl.classList.add("own-message");
+	}
 
 	// Set text content
 	msgEl.textContent = data.content;
@@ -73,7 +78,7 @@ messageFormEl.addEventListener("submit", (e) => {
 	console.log("Emitted 'sendChatMessage' event to the server", payload);
 
 	// Add message to the chat
-	addMessageToChat(payload);
+	addMessageToChat(payload, true);
 
 	// Clear input field
 	messageInputEl.value = "";

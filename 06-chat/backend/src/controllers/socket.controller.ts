@@ -20,6 +20,22 @@ export const handleConnection = (socket: Socket<ClientToServerEvents, ServerToCl
 		socket.broadcast.emit("chatMessage", payload);
 	});
 
+	// Listen for a user join request
+	socket.on("userJoinRequest", (username, callback) => {
+		debug("👶🏻 User %s from socket %s wants to join the chat", username, socket.id);
+
+		// Acknowledge request
+		// Always let the user in (for now 😇)
+		// We should probably check if the username is in use
+		// and not allow the user to join if it's already taken
+		if (username.toLowerCase().includes("bus-")) {
+			callback({ success: false });
+			return;
+		}
+
+		callback({ success: true });
+	});
+
 	// Handle user disconnecting
 	socket.on("disconnect", () => {
 		debug("Socket disconnected: %s", socket.id);

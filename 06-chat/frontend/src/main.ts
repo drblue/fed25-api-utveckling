@@ -43,7 +43,13 @@ const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	}
 
 	// Set text content
-	msgEl.textContent = data.content;
+	msgEl.innerHTML = ownMessage
+		? `
+			<span class="content">${data.content}</span>
+		` : `
+			<span class="user">${data.username}</span>
+			<span class="content">${data.content}</span>
+		`;
 
 	// Append LI to messages list
 	messagesEl.appendChild(msgEl);
@@ -118,13 +124,14 @@ messageFormEl.addEventListener("submit", (e) => {
 	const trimmedMessage = messageInputEl.value.trim();
 
 	// If no message, no send
-	if (!trimmedMessage) {
+	if (!trimmedMessage || !username) {
 		return;
 	}
 
 	// Construct message payload
 	const payload: ChatMessagePayload = {
 		content: trimmedMessage,
+		username,
 	}
 
 	// 📮 Send (emit) the message to the server

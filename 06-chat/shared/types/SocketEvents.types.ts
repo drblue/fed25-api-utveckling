@@ -13,4 +13,5 @@ export interface ClientToServerEvents {
 // Message payload
 export interface ChatMessagePayload {
 	content: string;
+	username: string;
 }

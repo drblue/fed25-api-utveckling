@@ -5,9 +5,27 @@ import "./assets/scss/style.scss";
 const SOCKET_HOST = import.meta.env.VITE_SOCKET_HOST;
 console.log("SOCKET_HOST:", SOCKET_HOST);
 
+/**
+ * DOM References
+ */
+
+// Forms
+const loginFormEl = document.querySelector<HTMLFormElement>("#login-form")!;
+const loginUsernameInputEl = document.querySelector<HTMLInputElement>("#username")!;
 const messageInputEl = document.querySelector<HTMLInputElement>("#message")!;
 const messageFormEl = document.querySelector<HTMLFormElement>("#message-form")!;
+
+// Lists
 const messagesEl = document.querySelector<HTMLDivElement>("#messages")!;
+
+// Views
+const chatWrapperEl = document.querySelector<HTMLDivElement>("#chat-wrapper")!;
+const loginWrapperEl = document.querySelector<HTMLDivElement>("#login-wrapper")!;
+
+/**
+ * Variables
+ */
+let username: string | null = null;
 
 /**
  * Functions
@@ -30,6 +48,19 @@ const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	// Append LI to messages list
 	messagesEl.appendChild(msgEl);
 }
+
+const showChatView = () => {
+	loginWrapperEl.classList.add("hide");
+	chatWrapperEl.classList.remove("hide");
+}
+
+/*
+// NOTE: Will be used later when leaving a room
+const showLoginView = () => {
+	chatWrapperEl.classList.add("hide");
+	loginWrapperEl.classList.remove("hide");
+}
+*/
 
 /**
  * Socket Event Listeners
@@ -54,9 +85,32 @@ socket.on("chatMessage", (payload) => {
 	addMessageToChat(payload);
 });
 
+
 /**
- * Send message to server when form is submitted
+ * DOM Event Listeners
  */
+
+// Save username and show chat
+loginFormEl.addEventListener("submit", (e) => {
+	e.preventDefault();
+
+	// 💇
+	const trimmedUsername = loginUsernameInputEl.value.trim();
+
+	// If no username, no join
+	if (!trimmedUsername) {
+		alert("No username? No chat 4 u!");
+		return;
+	}
+
+	// Set username
+	username = trimmedUsername;
+
+	// Show chat view
+	showChatView();
+});
+
+// Send message to server when form is submitted
 messageFormEl.addEventListener("submit", (e) => {
 	e.preventDefault();
 

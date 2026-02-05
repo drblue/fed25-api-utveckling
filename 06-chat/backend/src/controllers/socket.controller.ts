@@ -34,7 +34,7 @@ export const handleConnection = (
 		debug("📨 New chat message from %s: %o", socket.id, payload);
 
 		// Broadcast message to everyone connected EXCEPT the sender
-		socket.broadcast.emit("chatMessage", payload);
+		socket.to(payload.roomId).emit("chatMessage", payload);
 	});
 
 	// Listen for a user join request

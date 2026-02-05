@@ -25,6 +25,7 @@ export interface ClientToServerEvents {
 // Message payload
 export interface ChatMessagePayload {
 	content: string;
+	roomId: string;
 	timestamp: number;
 	username: string;
 }

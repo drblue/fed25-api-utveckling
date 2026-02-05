@@ -28,7 +28,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
  */
 io.on("connection", (socket) => {
 	debug("Socket connected: %s", socket.id);
-	handleConnection(socket);
+	handleConnection(socket, io);
 });
 
 /**

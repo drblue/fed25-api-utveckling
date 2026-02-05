@@ -3,13 +3,16 @@
  */
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import Debug from "debug";
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 // Create a new debug instance
 const debug = Debug('chat:socket_controller');
 debug("Socket Controller initialized");
 
-export const handleConnection = (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
+export const handleConnection = (
+	socket: Socket<ClientToServerEvents, ServerToClientEvents>,
+	_io: Server<ClientToServerEvents, ServerToClientEvents>
+) => {
 	// Yay someone connected to me
 
 	// Listen for incoming chat messages

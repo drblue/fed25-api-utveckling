@@ -91,7 +91,16 @@ const showChatView = () => {
 }
 
 const showLoginView = () => {
+	const connectBtnEl = document.querySelector<HTMLButtonElement>("#connectBtn")!;
+	const roomSelectEl = document.querySelector<HTMLSelectElement>("#room")!;
+
+	// Hide chat
 	chatWrapperEl.classList.add("hide");
+
+	// Disable "Connect"-button, dropdown and clear list of rooms
+	connectBtnEl.disabled = true;
+	roomSelectEl.disabled = true;
+	roomSelectEl.innerHTML = `<option selected>Loading...</option>`;
 
 	// Request a list of rooms from the server
 	// Once we get them, populate the `select` element with the rooms
@@ -100,6 +109,15 @@ const showLoginView = () => {
 	socket.emit("getRoomList", (rooms) => {
 		// We gots rooms
 		console.log("YAY ROOMS!", rooms);
+
+		// Update list of rooms with options for each room
+		roomSelectEl.innerHTML = rooms
+			.map(room => `<option value="${room.id}">${room.name}</option>`)
+			.join("");
+
+		// Enable "Connect"-button and dropdown
+		connectBtnEl.disabled = false;
+		roomSelectEl.disabled = false;
 	});
 
 	loginWrapperEl.classList.remove("hide");

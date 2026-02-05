@@ -34,6 +34,9 @@ export const handleConnection = (socket: Socket<ClientToServerEvents, ServerToCl
 		}
 
 		callback({ success: true });
+
+		// Broadcast to everyone else that a new user has joined
+		socket.broadcast.emit("userJoined", username, Date.now());
 	});
 
 	// Handle user disconnecting

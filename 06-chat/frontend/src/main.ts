@@ -30,6 +30,7 @@ let username: string | null = null;
 /**
  * Functions
  */
+
 const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	// Create a new LI element
 	const msgEl = document.createElement("li");
@@ -60,6 +61,30 @@ const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	messagesEl.appendChild(msgEl);
 }
 
+const addNoticeToChat = (msg: string, timestamp?: number) => {
+	if (!timestamp) {
+		timestamp = Date.now();
+	}
+
+	// Create a new LI element
+	const msgEl = document.createElement("li");
+
+	// Set CSS-classes
+	msgEl.classList.add("notice");
+
+	// Get human readable time
+	const humanReadableTime = new Date(timestamp).toLocaleTimeString();  // "13:37:00"
+
+	// Set text content
+	msgEl.innerHTML = `
+			<span class="content">${msg}</span>
+			<span class="time">${humanReadableTime}</span>
+		`;
+
+	// Append LI to messages list
+	messagesEl.appendChild(msgEl);
+}
+
 const showChatView = () => {
 	loginWrapperEl.classList.add("hide");
 	chatWrapperEl.classList.remove("hide");
@@ -83,11 +108,13 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_HOS
 // Listen for when a connection is established
 socket.on("connect", () => {
 	console.log("💥 Connected to the server", socket.id);
+	addNoticeToChat("Connected to the server");
 });
 
 // Listen for when the server gets tired of us
 socket.on("disconnect", () => {
 	console.log("🥺 Got disconnected from the server");
+	addNoticeToChat("Disconnected from the server");
 });
 
 // Listen for new chat messages (that the server emitts to us)
@@ -96,6 +123,11 @@ socket.on("chatMessage", (payload) => {
 	addMessageToChat(payload);
 });
 
+// Listen for when a new user joins the chat
+socket.on("userJoined", (username, timestamp) => {
+	console.log("👶🏻 A new user has joined the chat:", username, timestamp);
+	addNoticeToChat(`${username} has joined the chat`, timestamp);
+});
 
 /**
  * DOM Event Listeners

@@ -1,4 +1,4 @@
-import type { ChatMessagePayload, ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
+import type { ChatMessagePayload, ClientToServerEvents, ServerToClientEvents, UserJoinResponse } from "@shared/types/SocketEvents.types.ts";
 import { io, Socket } from "socket.io-client";
 import "./assets/scss/style.scss";
 
@@ -117,6 +117,17 @@ socket.on("disconnect", () => {
 	addNoticeToChat("Disconnected from the server");
 });
 
+// Listen for when we're reconnected (either due to ours or the servers fault)
+socket.io.on("reconnect", () => {
+	console.log("🥰 Reconnected to the server");
+
+	// If we were in the chat before being disconnected, re-emit the `userJoinRequest` event
+	if (username) {
+		socket.emit("userJoinRequest", username, userJoinRequestCallback);
+		addNoticeToChat("You've reconnected");
+	}
+});
+
 // Listen for new chat messages (that the server emitts to us)
 socket.on("chatMessage", (payload) => {
 	console.log("📨 YAY SOMEONE WROTE SOMETHING!!!!!!1111", payload);
@@ -128,6 +139,22 @@ socket.on("userJoined", (username, timestamp) => {
 	console.log("👶🏻 A new user has joined the chat:", username, timestamp);
 	addNoticeToChat(`${username} has joined the chat`, timestamp);
 });
+
+/**
+ * Socket Handlers
+ */
+const userJoinRequestCallback = (response: UserJoinResponse) => {
+	// This will only be executed once the server has responded
+	console.log("Server acknowledged our `userJoinRequest`:", response);
+
+	if (!response.success) {
+		alert("NO ACCESS 4 U!");
+		return;
+	}
+
+	// Show chat view
+	showChatView();
+}
 
 /**
  * DOM Event Listeners
@@ -153,18 +180,7 @@ loginFormEl.addEventListener("submit", (e) => {
 	// WAIT for acknowledgement
 	// BEFORE showing the chat view
 	console.log("Emitting `userJoinRequest` to the server");
-	socket.emit("userJoinRequest", username, (response) => {
-		// This will only be executed once the server has responded
-		console.log("Server acknowledged our `userJoinRequest`:", response);
-
-		if (!response.success) {
-			alert("NO ACCESS 4 U!");
-			return;
-		}
-
-		// Show chat view
-		showChatView();
-	});
+	socket.emit("userJoinRequest", username, userJoinRequestCallback);
 });
 
 // Send message to server when form is submitted

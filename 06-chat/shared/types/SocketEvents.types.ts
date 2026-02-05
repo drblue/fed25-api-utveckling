@@ -1,3 +1,4 @@
+import type { Room } from "./Models.types";
 export {}
 
 // Events emitted by the server to the client
@@ -8,7 +9,12 @@ export interface ServerToClientEvents {
 
 // Events emitted by the client to the server
 export interface ClientToServerEvents {
+	getRoomList: (
+		callback: (rooms: Room[]) => void
+	) => void;
+
 	sendChatMessage: (payload: ChatMessagePayload) => void;
+
 	userJoinRequest: (
 		username: string,
 		callback: (response: UserJoinResponse) => void

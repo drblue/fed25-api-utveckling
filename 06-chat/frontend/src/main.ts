@@ -90,13 +90,20 @@ const showChatView = () => {
 	chatWrapperEl.classList.remove("hide");
 }
 
-/*
-// NOTE: Will be used later when leaving a room
 const showLoginView = () => {
 	chatWrapperEl.classList.add("hide");
+
+	// Request a list of rooms from the server
+	// Once we get them, populate the `select` element with the rooms
+	// After that, enable the "Connect" button
+	console.log("🏨 Requesting rooms...");
+	socket.emit("getRoomList", (rooms) => {
+		// We gots rooms
+		console.log("YAY ROOMS!", rooms);
+	});
+
 	loginWrapperEl.classList.remove("hide");
 }
-*/
 
 /**
  * Socket Event Listeners
@@ -108,7 +115,9 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_HOS
 // Listen for when a connection is established
 socket.on("connect", () => {
 	console.log("💥 Connected to the server", socket.id);
-	addNoticeToChat("Connected to the server");
+
+	// Show login view
+	showLoginView();
 });
 
 // Listen for when the server gets tired of us

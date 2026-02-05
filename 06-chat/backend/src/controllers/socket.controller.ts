@@ -12,7 +12,7 @@ debug("Socket Controller initialized");
 
 export const handleConnection = (
 	socket: Socket<ClientToServerEvents, ServerToClientEvents>,
-	_io: Server<ClientToServerEvents, ServerToClientEvents>
+	io: Server<ClientToServerEvents, ServerToClientEvents>
 ) => {
 	// Yay someone connected to me
 
@@ -38,8 +38,8 @@ export const handleConnection = (
 	});
 
 	// Listen for a user join request
-	socket.on("userJoinRequest", (username, callback) => {
-		debug("👶🏻 User %s from socket %s wants to join the chat", username, socket.id);
+	socket.on("userJoinRequest", (username, roomId, callback) => {
+		debug("👶🏻 User %s from socket %s wants to join room %s", username, socket.id, roomId);
 
 		// Acknowledge request
 		// Always let the user in (for now 😇)
@@ -50,10 +50,14 @@ export const handleConnection = (
 			return;
 		}
 
+		// Join room `roomId`
+		socket.join(roomId);  // "69846c52e5bd692db4d14a0e"
+
+		// All is well, let the user in
 		callback({ success: true });
 
-		// Broadcast to everyone else that a new user has joined
-		socket.broadcast.emit("userJoined", username, Date.now());
+		// Broadcast to everyone in the room (including ourselves) that a user has joined
+		io.to(roomId).emit("userJoined", username, Date.now());
 	});
 
 	// Handle user disconnecting

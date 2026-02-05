@@ -17,6 +17,7 @@ export interface ClientToServerEvents {
 
 	userJoinRequest: (
 		username: string,
+		roomId: string,
 		callback: (response: UserJoinResponse) => void
 	) => void;
 }

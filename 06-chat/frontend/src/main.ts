@@ -27,6 +27,7 @@ const loginWrapperEl = document.querySelector<HTMLDivElement>("#login-wrapper")!
 /**
  * Variables
  */
+let roomId: string | null = null;
 let username: string | null = null;
 
 /**
@@ -148,8 +149,8 @@ socket.io.on("reconnect", () => {
 	console.log("🥰 Reconnected to the server");
 
 	// If we were in the chat before being disconnected, re-emit the `userJoinRequest` event
-	if (username) {
-		socket.emit("userJoinRequest", username, userJoinRequestCallback);
+	if (username && roomId) {
+		socket.emit("userJoinRequest", username, roomId, userJoinRequestCallback);
 		addNoticeToChat("You've reconnected");
 	}
 });
@@ -190,23 +191,21 @@ const userJoinRequestCallback = (response: UserJoinResponse) => {
 loginFormEl.addEventListener("submit", (e) => {
 	e.preventDefault();
 
-	// 💇
-	const trimmedUsername = loginUsernameInputEl.value.trim();
+	// Set username and roomId
+	roomId = loginRoomSelectEl.value;
+	username = loginUsernameInputEl.value.trim();
 
-	// If no username, no join
-	if (!trimmedUsername) {
-		alert("No username? No chat 4 u!");
+	// If no username or no room, no join
+	if (!username || !roomId) {
+		alert("No username or no room? No chat 4 u!");
 		return;
 	}
-
-	// Set username
-	username = trimmedUsername;
 
 	// Emit `userJoinRequest`-event to the server and
 	// WAIT for acknowledgement
 	// BEFORE showing the chat view
 	console.log("Emitting `userJoinRequest` to the server");
-	socket.emit("userJoinRequest", username, userJoinRequestCallback);
+	socket.emit("userJoinRequest", username, roomId, userJoinRequestCallback);
 });
 
 // Send message to server when form is submitted

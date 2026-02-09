@@ -180,10 +180,14 @@ const userJoinRequestCallback = (response: UserJoinResponse) => {
 	// This will only be executed once the server has responded
 	console.log("Server acknowledged our `userJoinRequest`:", response);
 
-	if (!response.success) {
+	if (!response.success || !response.room) {
 		alert("NO ACCESS 4 U!");
 		return;
 	}
+
+	// Update chat view title with room name
+	const chatTitleEl = document.querySelector<HTMLHeadingElement>("#chat-title")!;
+	chatTitleEl.innerText = response.room.name;
 
 	// Show chat view
 	showChatView();

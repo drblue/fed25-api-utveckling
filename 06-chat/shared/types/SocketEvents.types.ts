@@ -33,4 +33,5 @@ export interface ChatMessagePayload {
 // User Join Response
 export interface UserJoinResponse {
 	success: boolean;
+	room: Room | null;
 }

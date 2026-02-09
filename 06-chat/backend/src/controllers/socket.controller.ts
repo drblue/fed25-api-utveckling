@@ -38,15 +38,21 @@ export const handleConnection = (
 	});
 
 	// Listen for a user join request
-	socket.on("userJoinRequest", (username, roomId, callback) => {
+	socket.on("userJoinRequest", async (username, roomId, callback) => {
 		debug("👶🏻 User %s from socket %s wants to join room %s", username, socket.id, roomId);
 
-		// Acknowledge request
-		// Always let the user in (for now 😇)
-		// We should probably check if the username is in use
-		// and not allow the user to join if it's already taken
+		// Get room from database
+		const room = await prisma.room.findUnique({ where: { id: roomId } });
+
+		// If room was not found, respond with success: false
+		if (!room) {
+			callback({ success: false, room: null });
+			return;
+		}
+
+		// Don't allow busiga users
 		if (username.toLowerCase().includes("bus-")) {
-			callback({ success: false });
+			callback({ success: false, room: null });
 			return;
 		}
 
@@ -54,7 +60,8 @@ export const handleConnection = (
 		socket.join(roomId);  // "69846c52e5bd692db4d14a0e"
 
 		// All is well, let the user in
-		callback({ success: true });
+		// Include information about the room
+		callback({ success: true, room: room });
 
 		// Broadcast to everyone in the room (including ourselves) that a user has joined
 		io.to(roomId).emit("userJoined", username, Date.now());

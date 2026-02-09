@@ -88,7 +88,27 @@ export const handleConnection = (
 	});
 
 	// Handle user disconnecting
-	socket.on("disconnect", () => {
+	socket.on("disconnect", async () => {
 		debug("Socket disconnected: %s", socket.id);
+
+		// Find user in order to know they exist (and also to know which room they were in for future use)
+		const user = await prisma.user.findUnique({ where: { id: socket.id } });
+
+		// If user didn't exist, do nothing
+		if (!user) {
+			return;  // 🤷 virtual shrug
+		}
+
+		// Delete user with `id: socket.id`
+		await prisma.user.delete({ where: { id: socket.id } });
+		debug("🧹 Deleted user: %o", user);
+
+		/**
+		 * @todo Broadcast a notice to the room that the user has left
+		 */
+
+		/**
+		 * @todo Also broadcast a new list of users in the room
+		 */
 	});
 }

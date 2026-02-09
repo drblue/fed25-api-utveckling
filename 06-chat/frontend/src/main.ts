@@ -62,6 +62,9 @@ const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 
 	// Append LI to messages list
 	messagesEl.appendChild(msgEl);
+
+	// Scroll to this message (smooth 🫠)
+	msgEl.scrollIntoView({ behavior: "smooth" });
 }
 
 const addNoticeToChat = (msg: string, timestamp?: number) => {
@@ -86,6 +89,9 @@ const addNoticeToChat = (msg: string, timestamp?: number) => {
 
 	// Append LI to messages list
 	messagesEl.appendChild(msgEl);
+
+	// Scroll to this message (smooth 🫠)
+	msgEl.scrollIntoView({ behavior: "smooth" });
 }
 
 const showChatView = () => {

@@ -59,9 +59,19 @@ export const handleConnection = (
 		// Join room `roomId`
 		socket.join(roomId);  // "69846c52e5bd692db4d14a0e"
 
+		// 1. Create User, set id to socket.id and roomId to the roomId they want to join
+
+		// 2. Retrieve list of Users in the room
+
 		// All is well, let the user in
 		// Include information about the room
-		callback({ success: true, room: room });
+		callback({
+			success: true,
+			room: {
+				...room,
+				users: [],  // 3. Respond with list of users in the room
+			},
+		});
 
 		// Broadcast to everyone in the room (including ourselves) that a user has joined
 		io.to(roomId).emit("userJoined", username, Date.now());

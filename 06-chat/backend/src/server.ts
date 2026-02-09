@@ -5,6 +5,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import { handleConnection } from "./controllers/socket.controller.ts";
+import { prisma } from "./lib/prisma.ts";
 
 // Read port to start server on from `.env`, otherwise default to port 3000
 const PORT = process.env.PORT || 3000;
@@ -32,9 +33,21 @@ io.on("connection", (socket) => {
 });
 
 /**
- * Listen on provided port, on all network interfaces.
+ * Delete all users from the database 😈
  */
-httpServer.listen(PORT);
+prisma.user.deleteMany()
+	.then(() => {
+		console.log("🧹 Deleted all ze users 😇");
+
+		/**
+		 * Listen on provided port, on all network interfaces.
+		 */
+		httpServer.listen(PORT);
+	})
+	.catch(err => {
+		console.error("🚨 Could not delete all ze users 😱", err);
+		process.exit(1);
+	});
 
 /**
  * Event listener for HTTP server "error" event.

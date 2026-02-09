@@ -60,8 +60,18 @@ export const handleConnection = (
 		socket.join(roomId);  // "69846c52e5bd692db4d14a0e"
 
 		// 1. Create User, set id to socket.id and roomId to the roomId they want to join
+		const user = await prisma.user.create({
+			data: {
+				id: socket.id,
+				roomId,
+				username,
+			},
+		});
+		debug("👶 Created user: %o", user);
 
 		// 2. Retrieve list of Users in the room
+		const usersInRoom = await prisma.user.findMany({ where: { roomId: roomId } });
+		debug("List of users in room '%s' (%s): %O", room.name, room.id, usersInRoom);
 
 		// All is well, let the user in
 		// Include information about the room
@@ -69,7 +79,7 @@ export const handleConnection = (
 			success: true,
 			room: {
 				...room,
-				users: [],  // 3. Respond with list of users in the room
+				users: usersInRoom,  // 3. Respond with list of users in the room
 			},
 		});
 

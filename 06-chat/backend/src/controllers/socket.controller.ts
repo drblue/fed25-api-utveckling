@@ -105,7 +105,8 @@ export const handleConnection = (
 		await prisma.user.delete({ where: { id: socket.id } });
 		debug("🧹 Deleted user: %o", user);
 
-		// TODO: Broadcast a notice to the room that the user has left
+		// Broadcast a notice to the room that the user has left
+		io.to(user.roomId).emit("userLeft", user.username, Date.now());
 
 		// TODO: Also broadcast a new list of users in the room
 	});

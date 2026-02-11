@@ -170,7 +170,13 @@ socket.on("chatMessage", (payload) => {
 // Listen for when a new user joins the chat
 socket.on("userJoined", (username, timestamp) => {
 	console.log("👶🏻 A new user has joined the chat:", username, timestamp);
-	addNoticeToChat(`${username} has joined the chat`, timestamp);
+	addNoticeToChat(`🏡 ${username} has joined the chat`, timestamp);
+});
+
+// Listen for when a user leaves the chat
+socket.on("userLeft", (username, timestamp) => {
+	console.log("🚪 A user has left the chat:", username, timestamp);
+	addNoticeToChat(`🚪 ${username} has left the building`, timestamp);
 });
 
 /**

@@ -5,7 +5,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import { handleConnection } from "./controllers/socket.controller.ts";
-import { prisma } from "./lib/prisma.ts";
+import { deleteAllUsers } from "./services/user.service.ts";
 
 // Read port to start server on from `.env`, otherwise default to port 3000
 const PORT = process.env.PORT || 3000;
@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
 /**
  * Delete all users from the database 😈
  */
-prisma.user.deleteMany()
+deleteAllUsers()
 	.then(() => {
 		console.log("🧹 Deleted all ze users 😇");
 

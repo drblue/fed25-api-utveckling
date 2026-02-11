@@ -5,7 +5,7 @@ import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/Socket
 import Debug from "debug";
 import { Server, Socket } from "socket.io";
 import { prisma } from "../lib/prisma.ts";
-import { getUsersInRoom } from "../services/user.service.ts";
+import { createUser, deleteUser, getUser, getUsersInRoom } from "../services/user.service.ts";
 
 // Create a new debug instance
 const debug = Debug('chat:socket_controller');
@@ -61,12 +61,10 @@ export const handleConnection = (
 		socket.join(roomId);  // "69846c52e5bd692db4d14a0e"
 
 		// 1. Create User, set id to socket.id and roomId to the roomId they want to join
-		const user = await prisma.user.create({
-			data: {
-				id: socket.id,
-				roomId,
-				username,
-			},
+		const user = await createUser({
+			id: socket.id,
+			roomId,
+			username,
 		});
 		debug("👶 Created user: %o", user);
 
@@ -96,7 +94,7 @@ export const handleConnection = (
 		debug("Socket disconnected: %s", socket.id);
 
 		// Find user in order to know they exist (and also to know which room they were in for future use)
-		const user = await prisma.user.findUnique({ where: { id: socket.id } });
+		const user = await getUser(socket.id);
 
 		// If user didn't exist, do nothing
 		if (!user) {
@@ -104,7 +102,7 @@ export const handleConnection = (
 		}
 
 		// Delete user with `id: socket.id`
-		await prisma.user.delete({ where: { id: socket.id } });
+		await deleteUser(socket.id);
 		debug("🧹 Deleted user: %o", user);
 
 		// Retrieve list of Users in the room

@@ -136,8 +136,8 @@ const updateUserList = (users: User[]) => {
 	onlineUsersEl.innerHTML = users
 		.map(user =>
 			user.id === socket.id
-				? `<li class="me"><span>👩‍🚀</span> ${user.username}</li>`
-				: `<li><span>👽</span> ${user.username}</li>`
+				? `<li class="me"><span role="img" aria-label="astronaut">👩‍🚀</span> ${user.username}</li>`
+				: `<li><span role="img" aria-label="alien">👽</span> ${user.username}</li>`
 		)
 		.join("");
 }
@@ -183,13 +183,13 @@ socket.on("chatMessage", (payload) => {
 // Listen for when a new user joins the chat
 socket.on("userJoined", (username, timestamp) => {
 	console.log("👶🏻 A new user has joined the chat:", username, timestamp);
-	addNoticeToChat(`🏡 ${username} has joined the chat`, timestamp);
+	addNoticeToChat(`<span role="img" aria-label="house with garden">🏡</span> ${username} has joined the chat`, timestamp);
 });
 
 // Listen for when a user leaves the chat
 socket.on("userLeft", (username, timestamp) => {
 	console.log("🚪 A user has left the chat:", username, timestamp);
-	addNoticeToChat(`🚪 ${username} has left the building`, timestamp);
+	addNoticeToChat(`<span role="img" aria-label="door">🚪</span> ${username} has left the building`, timestamp);
 });
 
 // Listen for an updated list of online users

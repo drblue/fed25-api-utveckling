@@ -4,6 +4,7 @@ import Debug from "debug";
 import http from "http";
 import { Server } from "socket.io";
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
+import { instrument } from "@socket.io/admin-ui";
 import { handleConnection } from "./controllers/socket.controller.ts";
 import { deleteAllUsers } from "./services/user.service.ts";
 
@@ -20,9 +21,27 @@ const httpServer = http.createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
 	cors: {
 		credentials: true,
-		origin: "*",
+		origin: [
+			"http://localhost:5173",
+			"https://*.herokuapp.com",
+			"https://admin.socket.io",
+		],
 	},
 });
+
+/**
+ * Set up Socket.IO Admin (but only if we've set a password)
+ */
+if (process.env.SOCKET_IO_ADMIN_PASSWORD) {
+	console.log("💻 Setting up Socket.IO Admin UI");
+	instrument(io, {
+		auth: {
+			type: "basic",
+			username: "admin",
+			password: process.env.SOCKET_IO_ADMIN_PASSWORD,
+		},
+	});
+}
 
 /**
  * Handle incoming Socket.IO connection

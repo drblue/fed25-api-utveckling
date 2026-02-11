@@ -179,6 +179,17 @@ socket.on("userLeft", (username, timestamp) => {
 	addNoticeToChat(`🚪 ${username} has left the building`, timestamp);
 });
 
+// Listen for an updated list of online users
+socket.on("userList", (users) => {
+	console.log("Got a new list of online users:", users);
+
+	// Update list of online users in the room
+	const onlineUsersEl = document.querySelector<HTMLUListElement>("#online-users")!;
+	onlineUsersEl.innerHTML = users
+		.map(user => `<li>${user.username}</li>`)
+		.join("");
+});
+
 /**
  * Socket Handlers
  */

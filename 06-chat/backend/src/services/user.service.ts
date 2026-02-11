@@ -11,5 +11,8 @@ import { prisma } from "../lib/prisma.ts"
  * @returns List of users in room
  */
 export const getUsersInRoom = async (roomId: string) => {
-	return await prisma.user.findMany({ where: { roomId } });
+	return await prisma.user.findMany({
+		where: { roomId },
+		orderBy: { username: "asc" },
+	});
 }

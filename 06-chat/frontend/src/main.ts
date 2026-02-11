@@ -134,7 +134,11 @@ const showLoginView = () => {
 // Update list of users online in the room
 const updateUserList = (users: User[]) => {
 	onlineUsersEl.innerHTML = users
-		.map(user => `<li>${user.username}</li>`)
+		.map(user =>
+			user.id === socket.id
+				? `<li class="me"><span>👩‍🚀</span> ${user.username}</li>`
+				: `<li><span>👽</span> ${user.username}</li>`
+		)
 		.join("");
 }
 

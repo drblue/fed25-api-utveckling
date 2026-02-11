@@ -99,6 +99,9 @@ const addNoticeToChat = (msg: string, timestamp?: number) => {
 const showChatView = () => {
 	loginWrapperEl.classList.add("hide");
 	chatWrapperEl.classList.remove("hide");
+
+	// Focus on input field
+	messageInputEl.focus();
 }
 
 const showLoginView = () => {

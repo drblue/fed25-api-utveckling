@@ -1,3 +1,4 @@
+import type { User } from "@shared/types/Models.types";
 import type { ChatMessagePayload, ClientToServerEvents, ServerToClientEvents, UserJoinResponse } from "@shared/types/SocketEvents.types.ts";
 import { io, Socket } from "socket.io-client";
 import "./assets/scss/style.scss";
@@ -18,7 +19,8 @@ const messageInputEl = document.querySelector<HTMLInputElement>("#message")!;
 const messageFormEl = document.querySelector<HTMLFormElement>("#message-form")!;
 
 // Lists
-const messagesEl = document.querySelector<HTMLDivElement>("#messages")!;
+const messagesEl = document.querySelector<HTMLUListElement>("#messages")!;
+const onlineUsersEl = document.querySelector<HTMLUListElement>("#online-users")!;
 
 // Views
 const chatWrapperEl = document.querySelector<HTMLDivElement>("#chat-wrapper")!;
@@ -129,6 +131,13 @@ const showLoginView = () => {
 	loginWrapperEl.classList.remove("hide");
 }
 
+// Update list of users online in the room
+const updateUserList = (users: User[]) => {
+	onlineUsersEl.innerHTML = users
+		.map(user => `<li>${user.username}</li>`)
+		.join("");
+}
+
 /**
  * Socket Event Listeners
  */
@@ -184,10 +193,7 @@ socket.on("userList", (users) => {
 	console.log("Got a new list of online users:", users);
 
 	// Update list of online users in the room
-	const onlineUsersEl = document.querySelector<HTMLUListElement>("#online-users")!;
-	onlineUsersEl.innerHTML = users
-		.map(user => `<li>${user.username}</li>`)
-		.join("");
+	updateUserList(users);
 });
 
 /**
@@ -207,10 +213,7 @@ const userJoinRequestCallback = (response: UserJoinResponse) => {
 	chatTitleEl.innerText = response.room.name;
 
 	// Update list of online users in the room
-	const onlineUsersEl = document.querySelector<HTMLUListElement>("#online-users")!;
-	onlineUsersEl.innerHTML = response.room.users
-		.map(user => `<li>${user.username}</li>`)
-		.join("");
+	updateUserList(response.room.users);
 
 	// Show chat view
 	showChatView();

@@ -5,6 +5,7 @@ import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/Socket
 import Debug from "debug";
 import { Server, Socket } from "socket.io";
 import { prisma } from "../lib/prisma.ts";
+import { getUsersInRoom } from "../services/user.service.ts";
 
 // Create a new debug instance
 const debug = Debug('chat:socket_controller');
@@ -70,7 +71,7 @@ export const handleConnection = (
 		debug("👶 Created user: %o", user);
 
 		// 2. Retrieve list of Users in the room
-		const usersInRoom = await prisma.user.findMany({ where: { roomId: roomId } });
+		const usersInRoom = await getUsersInRoom(roomId);
 		debug("List of users in room '%s' (%s): %O", room.name, room.id, usersInRoom);
 
 		// All is well, let the user in
@@ -107,7 +108,7 @@ export const handleConnection = (
 		debug("🧹 Deleted user: %o", user);
 
 		// Retrieve list of Users in the room
-		const usersInRoom = await prisma.user.findMany({ where: { roomId: user.roomId } });
+		const usersInRoom = await getUsersInRoom(user.roomId);
 
 		// Broadcast a notice to the room that the user has left
 		io.to(user.roomId).emit("userLeft", user.username, Date.now());

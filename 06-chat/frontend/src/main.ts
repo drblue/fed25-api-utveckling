@@ -36,6 +36,18 @@ let username: string | null = null;
  * Functions
  */
 
+const addMessageHistory = (history: ChatMessagePayload[]) => {
+	console.log("🏛️📜 Adding message history to chat...");
+
+	// Clear any previous messages from the chat
+	messagesEl.innerHTML = "";
+
+	// Loop over messages and add them to the chat
+	history.forEach(message => {
+		addMessageToChat(message);
+	});
+}
+
 const addMessageToChat = (data: ChatMessagePayload, ownMessage = false) => {
 	// Create a new LI element
 	const msgEl = document.createElement("li");
@@ -218,6 +230,9 @@ const userJoinRequestCallback = (response: UserJoinResponse) => {
 	// Update chat view title with room name
 	const chatTitleEl = document.querySelector<HTMLHeadingElement>("#chat-title")!;
 	chatTitleEl.innerText = response.room.name;
+
+	// Add message history to chat
+	addMessageHistory(response.room.messages);
 
 	// Update list of online users in the room
 	updateUserList(response.room.users);

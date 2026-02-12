@@ -1,4 +1,4 @@
-import type { Room, User } from "./Models.types";
+import type { Message, Room, User } from "./Models.types";
 export {}
 
 // Events emitted by the server to the client
@@ -32,12 +32,13 @@ export interface ChatMessagePayload {
 	username: string;
 }
 
-interface RoomWithUsers extends Room {
+interface RoomInfo extends Room {
+	messages: Message[];
 	users: User[];
 }
 
 // User Join Response
 export interface UserJoinResponse {
 	success: boolean;
-	room: RoomWithUsers | null;
+	room: RoomInfo | null;
 }

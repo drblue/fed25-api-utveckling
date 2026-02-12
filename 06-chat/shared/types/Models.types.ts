@@ -1,4 +1,4 @@
 /**
  * Re-export Prisma Models
  */
-export type { Room, User } from "../../backend/generated/prisma/client.ts";
+export type { Message, Room, User } from "../../backend/generated/prisma/client.ts";

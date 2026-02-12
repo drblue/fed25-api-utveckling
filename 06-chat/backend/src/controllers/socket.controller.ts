@@ -4,7 +4,7 @@
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import Debug from "debug";
 import { Server, Socket } from "socket.io";
-import { createMessage } from "../services/message.service.ts";
+import { createMessage, getLatestMessagesByRoom } from "../services/message.service.ts";
 import { getRoom, getRooms } from "../services/room.service.ts";
 import { createUser, deleteUser, getUser, getUsersInRoom } from "../services/user.service.ts";
 
@@ -78,12 +78,16 @@ export const handleConnection = (
 		const usersInRoom = await getUsersInRoom(roomId);
 		debug("List of users in room '%s' (%s): %O", room.name, room.id, usersInRoom.map(user => `${user.username} [${user.id}]`));
 
+		// 3. Retrieve messages sent to the room
+		const messages = await getLatestMessagesByRoom(roomId);
+
 		// All is well, let the user in
 		// Include information about the room
 		callback({
 			success: true,
 			room: {
 				...room,
+				messages,
 				users: usersInRoom,  // 3. Respond with list of users in the room
 			},
 		});

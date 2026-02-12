@@ -4,7 +4,7 @@
 import { ClientToServerEvents, ServerToClientEvents } from "@shared/types/SocketEvents.types.ts";
 import Debug from "debug";
 import { Server, Socket } from "socket.io";
-import { prisma } from "../lib/prisma.ts";
+import { createMessage } from "../services/message.service.ts";
 import { getRoom, getRooms } from "../services/room.service.ts";
 import { createUser, deleteUser, getUser, getUsersInRoom } from "../services/user.service.ts";
 
@@ -32,11 +32,16 @@ export const handleConnection = (
 	});
 
 	// Listen for incoming chat messages
-	socket.on("sendChatMessage", (payload) => {
+	socket.on("sendChatMessage", async (payload) => {
 		debug("📨 New chat message from %s: %o", socket.id, payload);
 
-		// Broadcast message to everyone connected EXCEPT the sender
+		// 📢 Broadcast message to everyone connected EXCEPT the sender
 		socket.to(payload.roomId).emit("chatMessage", payload);
+		debug("📢 Broadcasted message to room %s", payload.roomId);
+
+		// 💾 Save message to db
+		const savedMessage = await createMessage(payload);
+		debug("💾 Saved chat message, ID is: %s", savedMessage.id);
 	});
 
 	// Listen for a user join request

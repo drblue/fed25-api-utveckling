@@ -76,7 +76,7 @@ export const handleConnection = (
 
 		// 2. Retrieve list of Users in the room
 		const usersInRoom = await getUsersInRoom(roomId);
-		debug("List of users in room '%s' (%s): %O", room.name, room.id, usersInRoom);
+		debug("List of users in room '%s' (%s): %O", room.name, room.id, usersInRoom.map(user => `${user.username} [${user.id}]`));
 
 		// All is well, let the user in
 		// Include information about the room

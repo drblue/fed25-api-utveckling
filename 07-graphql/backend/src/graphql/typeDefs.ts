@@ -29,6 +29,8 @@ const typeDefs = `#graphql
 		authors: [Author!]
 		books: [Book!]
 		publishers: [Publisher!]
+
+		book(id: Int!): Book
 	}
 `;
 

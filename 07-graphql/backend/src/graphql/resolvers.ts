@@ -13,6 +13,12 @@ const resolvers = {
 		publishers: () => {
 			return prisma.publisher.findMany();
 		},
+
+		book: (_parent: unknown, args: { id: number }) => {
+			return prisma.book.findUnique({
+				where: { id: args.id },
+			});
+		},
 	},
 
 	// Resolvers for the Relation fields

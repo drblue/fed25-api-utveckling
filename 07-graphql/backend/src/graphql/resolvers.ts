@@ -4,8 +4,14 @@ import { prisma } from "../lib/prisma.ts";
 const resolvers = {
 	// Resolvers for the Query fields
 	Query: {
+		authors: () => {
+			return prisma.author.findMany();
+		},
 		books: () => {
 			return prisma.book.findMany();
+		},
+		publishers: () => {
+			return prisma.publisher.findMany();
 		},
 	},
 

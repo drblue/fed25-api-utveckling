@@ -1,0 +1,12 @@
+{
+  "name": "07-graphql",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd frontend && npm install --include=dev && cd ../backend && npm install --include=dev",
+    "build": "cd backend && npm run build",
+    "start": "cd backend && npm run pre-deploy && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

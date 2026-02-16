@@ -1,4 +1,5 @@
 // Resolvers define how to fetch the types defined in your schema.
+import { Book } from "../../generated/prisma/client.ts";
 import { prisma } from "../lib/prisma.ts";
 
 const resolvers = {
@@ -32,8 +33,14 @@ const resolvers = {
 	},
 
 	// Resolvers for the Relation fields
-	// Book: {
-	// },
+	Book: {
+		publisher: (parent: Book) => {
+			return prisma.book.findUnique({
+				where: { id: parent.id },
+			})
+			.publisher();  // <-- Important, only return the Publisher relation
+		},
+	},
 
 	// Resolvers for the Mutation fields
 	// Mutation: {

@@ -1,6 +1,7 @@
 // Resolvers define how to fetch the types defined in your schema.
 import { Author, Book, Publisher } from "../../generated/prisma/client.ts";
 import { prisma } from "../lib/prisma.ts";
+import { CreateAuthorData, CreateBookData, CreatePublisherData, UpdateAuthorData, UpdateBookData, UpdatePublisherData } from "../types/index.ts";
 
 const resolvers = {
 	// Resolvers for the Query fields
@@ -66,12 +67,12 @@ const resolvers = {
 
 	// Resolvers for the Mutation fields
 	Mutation: {
-		createAuthor: (_parent: unknown, args: { data: Omit<Author, "id"> }) => {
+		createAuthor: (_parent: unknown, args: { data: CreateAuthorData }) => {
 			return prisma.author.create({
 				data: args.data,
 			});
 		},
-		updateAuthor: (_parent: unknown, args: { id: number, data: Omit<Author, "id">}) => {
+		updateAuthor: (_parent: unknown, args: { id: number, data: UpdateAuthorData}) => {
 			return prisma.author.update({
 				where: { id: args.id },
 				data: args.data,
@@ -83,12 +84,12 @@ const resolvers = {
 			});
 		},
 
-		createBook: (_parent: unknown, args: { data: Omit<Book, "id"> }) => {
+		createBook: (_parent: unknown, args: { data: CreateBookData }) => {
 			return prisma.book.create({
 				data: args.data,
 			});
 		},
-		updateBook: (_parent: unknown, args: { id: number, data: Omit<Book, "id"> }) => {
+		updateBook: (_parent: unknown, args: { id: number, data: UpdateBookData }) => {
 			return prisma.book.update({
 				where: { id: args.id },
 				data: args.data,
@@ -100,12 +101,12 @@ const resolvers = {
 			});
 		},
 
-		createPublisher: (_parent: unknown, args: { data: Omit<Publisher, "id"> }) => {
+		createPublisher: (_parent: unknown, args: { data: CreatePublisherData }) => {
 			return prisma.publisher.create({
 				data: args.data,
 			});
 		},
-		updatePublisher: (_parent: unknown, args: { id: number, data: Omit<Publisher, "id"> }) => {
+		updatePublisher: (_parent: unknown, args: { id: number, data: UpdatePublisherData }) => {
 			return prisma.publisher.update({
 				where: { id: args.id },
 				data: args.data,

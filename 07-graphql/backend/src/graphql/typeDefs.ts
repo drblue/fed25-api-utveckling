@@ -43,31 +43,45 @@ const typeDefs = `#graphql
 	# This "Mutation" type defines the mutatable fields for every type in our data source.
 	type Mutation {
 		# Author create, update, delete
-		createAuthor(data: AuthorInput!): Author
-		updateAuthor(id: Int!, data: AuthorInput!): Author
+		createAuthor(data: CreateAuthorInput!): Author
+		updateAuthor(id: Int!, data: UpdateAuthorInput!): Author
 		deleteAuthor(id: Int!): Author
 
-		createBook(data: BookInput!): Book
-		updateBook(id: Int!, data: BookInput!): Book
+		createBook(data: CreateBookInput!): Book
+		updateBook(id: Int!, data: UpdateBookInput!): Book
 		deleteBook(id: Int!): Book
 
-		createPublisher(data: PublisherInput!): Publisher
-		updatePublisher(id: Int!, data: PublisherInput!): Publisher
+		createPublisher(data: CreatePublisherInput!): Publisher
+		updatePublisher(id: Int!, data: UpdatePublisherInput!): Publisher
 		deletePublisher(id: Int!): Publisher
 	}
 
 	# Input Types
-	input AuthorInput {
+	input CreateAuthorInput {
 		name: String!
 		birthyear: Int
 	}
-	input BookInput {
+	input UpdateAuthorInput {
+		name: String
+		birthyear: Int
+	}
+
+	input CreateBookInput {
 		title: String!
 		pages: Int!
 		publisherId: Int
 	}
-	input PublisherInput {
+	input UpdateBookInput {
+		title: String
+		pages: Int
+		publisherId: Int
+	}
+
+	input CreatePublisherInput {
 		name: String!
+	}
+	input UpdatePublisherInput {
+		name: String
 	}
 `;
 

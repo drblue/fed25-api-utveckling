@@ -44,6 +44,7 @@ const typeDefs = `#graphql
 	type Mutation {
 		# Author create, update, delete
 		createAuthor(data: AuthorInput): Author
+		deleteAuthor(id: Int!): Author
 	}
 
 	# Input Types

@@ -50,6 +50,10 @@ const typeDefs = `#graphql
 		createBook(data: BookInput!): Book
 		updateBook(id: Int!, data: BookInput!): Book
 		deleteBook(id: Int!): Book
+
+		createPublisher(data: PublisherInput!): Publisher
+		updatePublisher(id: Int!, data: PublisherInput!): Publisher
+		deletePublisher(id: Int!): Publisher
 	}
 
 	# Input Types
@@ -61,6 +65,9 @@ const typeDefs = `#graphql
 		title: String!
 		pages: Int!
 		publisherId: Int
+	}
+	input PublisherInput {
+		name: String!
 	}
 `;
 

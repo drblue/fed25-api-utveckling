@@ -99,6 +99,23 @@ const resolvers = {
 				where: { id: args.id },
 			});
 		},
+
+		createPublisher: (_parent: unknown, args: { data: Omit<Publisher, "id"> }) => {
+			return prisma.publisher.create({
+				data: args.data,
+			});
+		},
+		updatePublisher: (_parent: unknown, args: { id: number, data: Omit<Publisher, "id"> }) => {
+			return prisma.publisher.update({
+				where: { id: args.id },
+				data: args.data,
+			});
+		},
+		deletePublisher: (_parent: unknown, args: { id: number }) => {
+			return prisma.publisher.delete({
+				where: { id: args.id },
+			});
+		},
 	},
 }
 

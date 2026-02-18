@@ -71,6 +71,12 @@ const resolvers = {
 				data: args.data,
 			});
 		},
+		updateAuthor: (_parent: unknown, args: { id: number, data: Omit<Author, "id">}) => {
+			return prisma.author.update({
+				where: { id: args.id },
+				data: args.data,
+			});
+		},
 		deleteAuthor: (_parent: unknown, args: { id: number }) => {
 			return prisma.author.delete({
 				where: { id: args.id },

@@ -65,8 +65,13 @@ const resolvers = {
 	},
 
 	// Resolvers for the Mutation fields
-	// Mutation: {
-	// },
+	Mutation: {
+		createAuthor: (_parent: unknown, args: { data: Omit<Author, "id"> }) => {
+			return prisma.author.create({
+				data: args.data,
+			});
+		},
+	},
 }
 
 export default resolvers;

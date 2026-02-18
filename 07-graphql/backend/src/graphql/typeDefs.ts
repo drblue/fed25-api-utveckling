@@ -26,6 +26,7 @@ const typeDefs = `#graphql
 		name: String!
 		books: [Book!]
 	}
+
 	# The "Query" type is special: it lists all of the available queries that
 	# clients can execute, along with the return type for each. In this
 	# case, the "books" query returns an array of zero or more Books (defined above).
@@ -37,6 +38,18 @@ const typeDefs = `#graphql
 		author(id: Int!): Author
 		book(id: Int!): Book
 		publisher(id: Int!): Publisher
+	}
+
+	# This "Mutation" type defines the mutatable fields for every type in our data source.
+	type Mutation {
+		# Author create, update, delete
+		createAuthor(data: AuthorInput): Author
+	}
+
+	# Input Types
+	input AuthorInput {
+		name: String!
+		birthyear: Int
 	}
 `;
 

@@ -67,6 +67,7 @@ const resolvers = {
 
 	// Resolvers for the Mutation fields
 	Mutation: {
+		// Author
 		createAuthor: (_parent: unknown, args: { data: CreateAuthorData }) => {
 			return prisma.author.create({
 				data: args.data,
@@ -84,6 +85,7 @@ const resolvers = {
 			});
 		},
 
+		// Book
 		createBook: (_parent: unknown, args: { data: CreateBookData }) => {
 			return prisma.book.create({
 				data: args.data,
@@ -100,7 +102,28 @@ const resolvers = {
 				where: { id: args.id },
 			});
 		},
+		addBookAuthor: (_parent: unknown, args: { bookId: number, authorId: number }) => {
+			return prisma.book.update({
+				where: { id: args.bookId },
+				data: {
+					authors: {
+						connect: { id: args.authorId }
+					},
+				},
+			});
+		},
+		removeBookAuthor: (_parent: unknown, args: { bookId: number, authorId: number }) => {
+			return prisma.book.update({
+				where: { id: args.bookId },
+				data: {
+					authors: {
+						disconnect: { id: args.authorId }
+					},
+				},
+			});
+		},
 
+		// Publisher
 		createPublisher: (_parent: unknown, args: { data: CreatePublisherData }) => {
 			return prisma.publisher.create({
 				data: args.data,

@@ -46,12 +46,21 @@ const typeDefs = `#graphql
 		createAuthor(data: AuthorInput!): Author
 		updateAuthor(id: Int!, data: AuthorInput!): Author
 		deleteAuthor(id: Int!): Author
+
+		createBook(data: BookInput!): Book
+		updateBook(id: Int!, data: BookInput!): Book
+		deleteBook(id: Int!): Book
 	}
 
 	# Input Types
 	input AuthorInput {
 		name: String!
 		birthyear: Int
+	}
+	input BookInput {
+		title: String!
+		pages: Int!
+		publisherId: Int
 	}
 `;
 

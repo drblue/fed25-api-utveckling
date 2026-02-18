@@ -82,6 +82,23 @@ const resolvers = {
 				where: { id: args.id },
 			});
 		},
+
+		createBook: (_parent: unknown, args: { data: Omit<Book, "id"> }) => {
+			return prisma.book.create({
+				data: args.data,
+			});
+		},
+		updateBook: (_parent: unknown, args: { id: number, data: Omit<Book, "id"> }) => {
+			return prisma.book.update({
+				where: { id: args.id },
+				data: args.data,
+			});
+		},
+		deleteBook: (_parent: unknown, args: { id: number }) => {
+			return prisma.book.delete({
+				where: { id: args.id },
+			});
+		},
 	},
 }
 

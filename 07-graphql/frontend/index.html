@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="https://fav.farm/📈" />
+	<link rel="stylesheet" href="/src/assets/scss/style.scss">
+	<title>GraphQL frontend</title>
+</head>
+
+<body>
+	<div id="app">
+		<div id="loading-indicator" class="loading-indicator d-none" aria-live="polite" aria-busy="true">
+			<span class="loading-spinner" aria-hidden="true"></span>
+			<span>Loading...</span>
+		</div>
+
+		<header class="hero mb-4">
+			<h1 class="mb-2">GraphQL Library Browser</h1>
+			<p class="text-secondary mb-0">Explore books, authors and publishers with linked details.</p>
+		</header>
+
+		<div id="status" class="status-error d-none" role="alert"></div>
+
+		<div class="layout">
+			<section class="panel">
+				<h2>Books</h2>
+				<ul id="books" class="entity-list"></ul>
+			</section>
+
+			<section class="panel">
+				<h2>Authors</h2>
+				<ul id="authors" class="entity-list"></ul>
+			</section>
+
+			<section class="panel">
+				<h2>Publishers</h2>
+				<ul id="publishers" class="entity-list"></ul>
+			</section>
+		</div>
+
+		<section class="panel detail-panel mt-4">
+			<h2>Details</h2>
+			<div id="details" class="details-placeholder">Click a book, author or publisher to view details.</div>
+		</section>
+	</div><!-- /#app -->
+
+	<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

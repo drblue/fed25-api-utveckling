@@ -1,0 +1,66 @@
+$layout-max-width: 1200px;
+$app-margin-y: 1rem;
+$app-padding-x: 0.75rem;
+$app-padding-bottom: 1.25rem;
+$app-margin-y-md: 2rem;
+$app-padding-x-md: 1rem;
+$app-padding-bottom-md: 2rem;
+
+$radius-pill: 999px;
+$radius-md: 0.75rem;
+$radius-lg: 0.9rem;
+$radius-xl: 1rem;
+
+$shadow-soft: 0 4px 14px #0a28500d;
+$shadow-soft-hero: 0 4px 14px #0a28500f;
+$shadow-floating: 0 8px 20px #0a285014;
+
+$body-bg-start: #f8fafc;
+$body-bg-end: #eef2f9;
+$text-main: #1f2937;
+$text-strong: #0f172a;
+$text-muted: #64748b;
+
+$surface: #ffffff;
+$surface-border: #dbe3ef;
+
+$link: #0d6efd;
+$link-hover: #0a58ca;
+$link-decoration: #0d6efd59;
+$link-decoration-hover: #0a58cab3;
+
+$spinner-track: #bfdbfe;
+$spinner-head: #0d6efd;
+
+$error-text: #8b1d1d;
+$error-bg: #fee2e2;
+$error-border: #fecaca;
+
+$detail-panel-min-height: 220px;
+$details-min-height: 130px;
+
+$breakpoint-md: 992px;
+
+// Dark mode
+$dark-body-bg-start: #0b1220;
+$dark-body-bg-end: #0f172a;
+$dark-text-main: #e5e7eb;
+$dark-text-muted: #94a3b8;
+
+$dark-surface: #111827;
+$dark-surface-border: #334155;
+
+$dark-shadow-soft: 0 4px 14px #0000004d;
+$dark-shadow-floating: 0 8px 20px #00000059;
+
+$dark-link: #93c5fd;
+$dark-link-hover: #bfdbfe;
+$dark-link-decoration: #93c5fd73;
+$dark-link-decoration-hover: #bfdbfed9;
+
+$dark-spinner-track: #334155;
+$dark-spinner-head: #60a5fa;
+
+$dark-error-text: #fecaca;
+$dark-error-bg: #450a0a;
+$dark-error-border: #7f1d1d;

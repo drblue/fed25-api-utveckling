@@ -1,0 +1,183 @@
+@import "./variables";
+@import "bootstrap/scss/bootstrap";
+
+body {
+	background: linear-gradient(180deg, $body-bg-start 0%, $body-bg-end 100%);
+	min-height: 100vh;
+	color: $text-main;
+}
+
+#app {
+	position: relative;
+	max-width: $layout-max-width;
+	margin: $app-margin-y auto;
+	padding: 0 $app-padding-x $app-padding-bottom;
+}
+
+.loading-indicator {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.75rem;
+	z-index: 20;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: $surface;
+	padding: 0.5rem 0.75rem;
+	border-radius: $radius-pill;
+	border: 1px solid $surface-border;
+	box-shadow: $shadow-floating;
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: $text-strong;
+}
+
+.loading-spinner {
+	width: 0.95rem;
+	height: 0.95rem;
+	border-radius: 50%;
+	border: 2px solid $spinner-track;
+	border-top-color: $spinner-head;
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.status-error {
+	color: $error-text;
+	background: $error-bg;
+	border: 1px solid $error-border;
+	border-radius: $radius-md;
+	padding: 0.75rem 0.9rem;
+	margin-bottom: 1rem;
+}
+
+.hero {
+	background: $surface;
+	border: 1px solid $surface-border;
+	border-radius: $radius-xl;
+	padding: 1rem 1.25rem;
+	box-shadow: $shadow-soft-hero;
+}
+
+.layout {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+}
+
+.panel {
+	background: $surface;
+	border-radius: $radius-lg;
+	padding: 1rem;
+	border: 1px solid $surface-border;
+	box-shadow: $shadow-soft;
+}
+
+.entity-list,
+.detail-list {
+	margin: 0;
+	padding-left: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.entity-link {
+	appearance: none;
+	border: none;
+	background: transparent;
+	padding: 0;
+	color: $link;
+	font-weight: 500;
+	text-align: left;
+	text-decoration: underline;
+	text-decoration-color: $link-decoration;
+	text-underline-offset: 0.2em;
+	cursor: pointer;
+
+	&:hover {
+		color: $link-hover;
+		text-decoration-color: $link-decoration-hover;
+	}
+}
+
+.detail-panel {
+	min-height: $detail-panel-min-height;
+}
+
+#details {
+	min-height: $details-min-height;
+}
+
+.details-placeholder {
+	color: $text-muted;
+	font-style: italic;
+}
+
+@media (min-width: $breakpoint-md) {
+	#app {
+		margin: $app-margin-y-md auto;
+		padding: 0 $app-padding-x-md $app-padding-bottom-md;
+	}
+
+	.loading-indicator {
+		top: 0.75rem;
+		right: 1.25rem;
+	}
+
+	.layout {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background: linear-gradient(180deg, $dark-body-bg-start 0%, $dark-body-bg-end 100%);
+		color: $dark-text-main;
+	}
+
+	.loading-indicator {
+		background: $dark-surface;
+		border-color: $dark-surface-border;
+		box-shadow: $dark-shadow-floating;
+		color: $dark-text-main;
+	}
+
+	.loading-spinner {
+		border-color: $dark-spinner-track;
+		border-top-color: $dark-spinner-head;
+	}
+
+	.status-error {
+		color: $dark-error-text;
+		background: $dark-error-bg;
+		border-color: $dark-error-border;
+	}
+
+	.hero,
+	.panel {
+		background: $dark-surface;
+		border-color: $dark-surface-border;
+		box-shadow: $dark-shadow-soft;
+	}
+
+	.text-secondary,
+	.details-placeholder {
+		color: $dark-text-muted !important;
+	}
+
+	.entity-link {
+		color: $dark-link;
+		text-decoration-color: $dark-link-decoration;
+
+		&:hover {
+			color: $dark-link-hover;
+			text-decoration-color: $dark-link-decoration-hover;
+		}
+	}
+}
